@@ -1,8 +1,15 @@
-from fastapi import APIRouter,status,HTTPException
-auth_router=APIRouter(tags=["Authentication Routes"],prefix="/auth")
+from fastapi import APIRouter,status,HTTPException,Depends
+from crud.users import UsersAuthCrudClass,UsersCrudClass
+from crud.admin import AdminAuthCrudClass
+from schemas.users import CreateUserResponse,CreateUser
+from config.database import get_async_session
+from sqlalchemy.ext.asyncio.session import AsyncSession
 
-@auth_router.post("/register")
-async def register_user():
+auth_router=APIRouter(tags=["Authentication Routes"],prefix="/auth")
+auth_service=UsersAuthCrudClass()
+
+@auth_router.post("/register",status_code=status.HTTP_201_CREATED,description="Register new user into the system",response_model=CreateUserResponse)
+async def register_user(new_user:CreateUser,session:AsyncSession=Depends(get_async_session),auth_user=auth_service):
     """
         Register a new user by providing the following fields:
         1. email
@@ -10,9 +17,9 @@ async def register_user():
         3. first name
         4. last name
     """
-    return True
+    return await auth_user.register_new_user_crud(user=new_user,session=session)
 
-@auth_router.post("/login")
+@auth_router.post("/login",status_code=status.HTTP_200_OK,description="Login new user into the system")
 async def login_users():
     """
         login registered users by providing the following fields
