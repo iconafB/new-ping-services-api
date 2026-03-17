@@ -4,7 +4,7 @@ from sqlalchemy import select,func
 from math import ceil
 from utils.logging.logger import define_logger
 from models.credits import Credits,Credits_History_Table
-from schemas.credits import CreateCreditsResponse,UserCreditsHistoryResponse,UserCreditsHistoryItem
+from schemas.credits import CreateCreditsResponse,UserCreditsHistoryResponse,UserCreditsHistoryItem,DeleteCreditsHistory
 """
 Implement  a class that performs crud for the credits entity of the system
 """
@@ -89,19 +89,26 @@ class CreditsCrudClass:
         except Exception as e:
             credits_logger.exception(f"an internal server error occurred while get credits records:{user_id},{str(e)}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred while fetching credits record for user:{user_id}")
-    # update credits history
+    
     # remove credits history
     async def delete_credits_history_db(self,user_id:int,session:AsyncSession):
         credits_stmt=select(Credits_History_Table).where(Credits_History_Table.created_by==user_id)
         try:
-
-            return
+            result=await session.execute(credits_stmt)
+            credit_history=result.scalar_one_or_none()
+            if credit_history is None:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"record does not exist")
+            await session.delete(credit_history)
+            await session.commit()
+            credits_logger.info(f"Credits history for user {user_id} deleted successfully")
+            return DeleteCreditsHistory(message=f"Credits history for user {user_id} deleted successfully")
         except HTTPException:
             raise
-        
+
         except Exception as e:
+            await session.rollback()
             credits_logger.exception(f"an internal server error occurred while deleting credits history:{str(e)}")
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while deleting credits history:{credits_id}")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while deleting credits history:{user_id}")
     
     async def log_credits_history(self,credit_amount:int,created_by:int,session:AsyncSession):
         try:

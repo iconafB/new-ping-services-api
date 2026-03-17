@@ -26,3 +26,5 @@ class UserCreditsHistoryResponse(BaseModel):
     total_pages:int
 
 
+class DeleteCreditsHistory(BaseModel):
+    message:str

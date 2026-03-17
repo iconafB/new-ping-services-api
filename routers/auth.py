@@ -1,10 +1,13 @@
-from fastapi import APIRouter,status,HTTPException,Depends
-from crud.users import UsersAuthCrudClass,UsersCrudClass
+from fastapi import APIRouter,status,Depends
+from fastapi.security import OAuth2PasswordRequestForm
+from typing import Annotated
+from sqlalchemy.ext.asyncio.session import AsyncSession
+from config.database import get_async_session
+from crud.users import UsersAuthCrudClass
 from crud.admin import AdminAuthCrudClass
 from schemas.users import CreateUserResponse,CreateUser
 from config.database import get_async_session
 from sqlalchemy.ext.asyncio.session import AsyncSession
-
 auth_router=APIRouter(tags=["Authentication Routes"],prefix="/auth")
 auth_service=UsersAuthCrudClass()
 
@@ -20,13 +23,15 @@ async def register_user(new_user:CreateUser,session:AsyncSession=Depends(get_asy
     return await auth_user.register_new_user_crud(user=new_user,session=session)
 
 @auth_router.post("/login",status_code=status.HTTP_200_OK,description="Login new user into the system")
-async def login_users():
+async def login_users(form_data:Annotated[OAuth2PasswordRequestForm,Depends()],session:AsyncSession=Depends(get_async_session)):
+    
     """
         login registered users by providing the following fields
         1. email
         2. password
     """
-    return True
+    
+    return await auth_service.login_user_crud(form_data,session)
 
 @auth_router.post("/admin/register")
 async def register_new_admin():
@@ -50,3 +55,4 @@ async def login_admin():
         2. email
     """
     return True
+
