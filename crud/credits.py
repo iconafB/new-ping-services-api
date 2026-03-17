@@ -38,6 +38,7 @@ class CreditsCrudClass:
                 await session.refresh(user_credits_result)
                 credits_logger.info(f"user:{user_id} loaded credits total:{user_credits_result.credits_total}")
                 return CreateCreditsResponse(credits_id=user_credits_result.credits_id,credits_total=user_credits_result.credits_total,created_by=user_credits_result.created_by)
+        
         except HTTPException:
             raise
 
@@ -47,7 +48,7 @@ class CreditsCrudClass:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred while loading credits for user:{user_id}")
     
     # get all credits, credits history, this history should be paginated
-    async def get_all_credits_history_for_a_user(self,page:int,page_size:int,user_id:int,session:AsyncSession)-> UserCreditsHistoryResponse:
+    async def get_all_credits_history_for_a_user(self,page:int,page_size:int,user_id:int,session:AsyncSession)->UserCreditsHistoryResponse:
         try:
             offset=(page - 1)*page_size
             base_query=select(Credits_History_Table)
@@ -102,6 +103,7 @@ class CreditsCrudClass:
             await session.commit()
             credits_logger.info(f"Credits history for user {user_id} deleted successfully")
             return DeleteCreditsHistory(message=f"Credits history for user {user_id} deleted successfully")
+        
         except HTTPException:
             raise
 

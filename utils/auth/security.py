@@ -1,11 +1,18 @@
 from fastapi import HTTPException,status,Depends
+from typing import Annotated
 import jwt
-from jwt.exceptions import InvalidTokenError
-from fastapi.security import OAuth2PasswordBearer,OAuth2PasswordRequestForm
+from sqlalchemy import select
 from pwdlib import PasswordHash
 from typing import Annotated
-from settings.settings import get_settings
 from datetime import timedelta,datetime,timezone
+from sqlalchemy.ext.asyncio.session import AsyncSession
+from jwt.exceptions import InvalidTokenError
+from fastapi.security import OAuth2PasswordBearer,OAuth2PasswordRequestForm
+from models.users import Users
+from config.database import get_async_session
+from settings.settings import get_settings
+from utils.logging.logger import define_logger
+auth_logger=define_logger("auth_logger","logs/auth_route.log")
 
 ALGORITHM='HS256'
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
@@ -29,17 +36,31 @@ def create_access_token(data:dict,expires_delta:timedelta | None=None)->str:
     encoded_jwt=jwt.encode(to_encode,get_settings().SECRET_KEY,algorithm=ALGORITHM)
     return encoded_jwt
 
-
-def decode_token(token:Annotated[str,Depends(oauth2_scheme)]):
+    
+def get_current_user_id(token: Annotated[str, Depends(oauth2_scheme)]):
     credentials_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="Could not validate credentials",headers={"WWW-Authenticate": "Bearer"})
     try:
-        
-        return 
-    except Exception as e:
+        payload=jwt.decode(token,get_settings().SECRET_KEY,algorithms=ALGORITHM)
+        user_id=payload["user_id"]
+        if user_id is None:
+            raise credentials_exception
+    except InvalidTokenError:
         raise credentials_exception
-    
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
+    return user_id
+
+#DRY Principle violeted
+async def get_current_active_user_id(user_id:Annotated[int,Depends(get_current_user_id)],session:AsyncSession=Depends(get_async_session))->int:
     credentials_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="Could not validate credentials",headers={"WWW-Authenticate": "Bearer"})
+    try:
+        user_stmt=select(Users.id).where(Users.id==user_id)
+        current_user_id=(await session.execute(user_stmt)).scalar_one_or_none()
+        if current_user_id is None:
+            raise credentials_exception
+        return current_user_id
+    except Exception as e:
+        auth_logger.exception(f"an internal server error occurred while fetching the current active user:{str(e)}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while fetching the current user id")
+    
     
 
 
