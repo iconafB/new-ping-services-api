@@ -15,14 +15,42 @@ users_logger=define_logger("users_logger","logs/users_route.log")
 
 class UsersCrudClass:
     # get all users on the system
+    async def get_all_users(page:int,page_size:int,session:AsyncSession):
+        try:
+            return True
+        except Exception as e:
+            users_logger.exception(f"an internal server error occurred while fetching users:{str(e)}")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while fetching users")
     # get single user on the system
+    async def get_single_users(user_id:int,session:AsyncSession):
+        try:
+            return True
+        except Exception as e:
+            users_logger.exception(f"an internal server error while fetching user:{user_id},{str(e)}")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while fetching user:{user_id}")
     # update user details
+    async def update_users(user_id:int,session:AsyncSession):
+        try:
+            return True
+        except Exception as e:
+            users_logger.exception(f"an internal server error occurred while updating user:{user_id},{str(e)}")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while fetching user:{user_id}")
     # delete user from the system soft delete
+    async def delete_user_soft_delete(user_id:int,session:AsyncSession):
+        try:
+            return True
+        except Exception as e:
+            users_logger.exception(f"an internal server error occurred while deleting user:{user_id},{str(e)}")
     # delete user from the system hard delete
-    
-    pass
+    async def delete_user_hard_delete(user_id:int,session:AsyncSession):
+        try:
+            return True
+        except Exception as e:
+            users_logger.exception(f"an internal server error occurred while deleting user:{user_id},error:{str(e)}")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred while deleting user:{user_id}")
 
 class UsersAuthCrudClass:
+    
     #register new user
     async def register_new_user_crud(user:CreateUser,session:AsyncSession)->CreateUserResponse:
         hashed_password=hash_password(user.password)
@@ -43,6 +71,7 @@ class UsersAuthCrudClass:
             await session.rollback()
             users_logger.exception(f"an internal server error occurred while creating user:{str(e)}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail="an internal server error while creating a user")
+    
     #login user into the system
     async def login_user_crud(form_data:OAuth2PasswordRequestForm,session:AsyncSession):
         user_email=form_data.username
@@ -59,3 +88,5 @@ class UsersAuthCrudClass:
         except Exception as e:
             users_logger.exception(f"an internal server error while login user:{str(e)}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred while login user")
+
+

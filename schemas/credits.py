@@ -1,16 +1,28 @@
-from pydantic import BaseModel
-
+from pydantic import BaseModel,ConfigDict
+from datetime import datetime
+from typing import List
 class CreateCredits(BaseModel):
-    pass
+    credits_total:int
 
 class CreateCreditsResponse(BaseModel):
-    pass
+    credits_id:int
+    credits_total:int
+    created_by:int
 
-class GetAllCreditsResponse(BaseModel):
-    pass
 
-class UpdateCredits(BaseModel):
-    pass
+class UserCreditsHistoryItem(BaseModel):
+    history_id:int
+    credits_amount:int
+    created_by:int
+    is_active:bool
+    created_at:datetime
+    model_config=ConfigDict(from_attributes=True)
 
-class UpdateCreditsResponse(BaseModel):
-    pass
+class UserCreditsHistoryResponse(BaseModel):
+    items:List[UserCreditsHistoryItem]
+    page:int
+    page_size:int
+    total_records:int
+    total_pages:int
+
+

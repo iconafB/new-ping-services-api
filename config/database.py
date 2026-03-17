@@ -10,9 +10,9 @@ engine=create_async_engine(DATABASE_URL,echo=False,future=True,pool_timeout=30,p
 async_session_maker=async_sessionmaker(bind=engine,expire_on_commit=False,class_=AsyncSession)
 
 async def get_async_session()->AsyncGenerator[AsyncSession,None]:
-
     async with async_session_maker() as session:
         try:
             yield session
         finally:
             await session.close()
+
