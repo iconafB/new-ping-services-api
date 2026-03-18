@@ -13,8 +13,8 @@ async def load_credits(credits_amount:CreateCredits,user_id:int=Depends(get_curr
     return await credits_object.load_client_credits(credits_amount=credits_amount.credits_amount,user_id=user_id,session=session)
 
 #get credits history for a user
-@credits_router.get("/history",status_code=status.HTTP_200_OK,description="Get credits history for a specific user logged in")
-async def get_user_credits_history(page:int,page_size:int,user_id:int=Depends(get_current_active_user_id),session:AsyncSession=Depends(get_async_session)):
+@credits_router.get("/history",status_code=status.HTTP_200_OK,description="Get credits history for a specific user logged in",response_model=UserCreditsHistoryResponse)
+async def get_user_credits_history(page:int=Query(1,ge=1,description="page number"),page_size:int=Query(10,le=100,description="page size"),user_id:int=Depends(get_current_active_user_id),session:AsyncSession=Depends(get_async_session)):
     return await credits_object.get_all_credits_history_for_a_user(page=page,page_size=page_size,user_id=user_id,session=session)
 
 #get single history record

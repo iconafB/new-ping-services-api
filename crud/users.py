@@ -59,8 +59,9 @@ class UsersAuthCrudClass:
         user_query=select(Users).where(Users.email==user.email)
         try:
             result=(await session.execute(user_query)).scalar_one_or_none()
+
             if result is not None:
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail=f"user already exists")
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail=f"an invalid credentials")
             new_user=Users(first_name=user.first_name,last_name=user.last_name,password=hashed_password,email=user.email)
             session.add(new_user)
             await session.commit()
