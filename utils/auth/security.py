@@ -8,7 +8,7 @@ from datetime import timedelta,datetime,timezone
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from jwt.exceptions import InvalidTokenError
 from fastapi.security import OAuth2PasswordBearer,OAuth2PasswordRequestForm
-from models.users import Users
+from models.clients import Clients_Table
 from config.database import get_async_session
 from settings.settings import get_settings
 from utils.logging.logger import define_logger
@@ -52,7 +52,7 @@ def get_current_user_id(token: Annotated[str, Depends(oauth2_scheme)]):
 async def get_current_active_user_id(user_id:Annotated[int,Depends(get_current_user_id)],session:AsyncSession=Depends(get_async_session))->int:
     credentials_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="Could not validate credentials",headers={"WWW-Authenticate": "Bearer"})
     try:
-        user_stmt=select(Users.id).where(Users.id==user_id)
+        user_stmt=select(Clients_Table.client_id).where(Clients_Table.client_id==user_id)
         current_user_id=(await session.execute(user_stmt)).scalar_one_or_none()
         if current_user_id is None:
             raise credentials_exception
