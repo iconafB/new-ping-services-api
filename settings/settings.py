@@ -1,10 +1,11 @@
 from functools import lru_cache
 from pydantic_settings import BaseSettings,SettingsConfigDict
+
 """
 load environment variable class
 """
 
-class Settings:
+class Settings(BaseSettings):
     MASTER_DB_OWNER:str
     MASTER_DB_PASSWORD:str
     MASTER_DB_HOST_NAME:str

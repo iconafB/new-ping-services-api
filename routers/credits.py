@@ -8,7 +8,7 @@ credits_router=APIRouter(tags=["CREDITS ROUTES"],prefix="/credits")
 credits_object=CreditsCrudClass()
 
 #load credits
-@credits_router.post("/load",status_code=status.HTTP_201_OK,description="Load credits",response_model=CreateCreditsResponse)
+@credits_router.post("/load",status_code=status.HTTP_201_CREATED,description="Load credits",response_model=CreateCreditsResponse)
 async def load_credits(credits_amount:CreateCredits,user_id:int=Depends(get_current_active_user_id),session:AsyncSession=Depends(get_async_session)):
     return await credits_object.load_client_credits(credits_amount=credits_amount.credits_amount,user_id=user_id,session=session)
 
