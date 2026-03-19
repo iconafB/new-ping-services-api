@@ -1,4 +1,4 @@
-from fastapi import APIRouter,Depends,status,Path,Query
+from fastapi import APIRouter,Depends,status,Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from crud.credits import CreditsCrudClass
 from schemas.credits import CreateCreditsResponse,CreateCredits,UserCreditsHistoryResponse,DeleteCreditsHistory
@@ -22,6 +22,6 @@ async def get_user_credits_history(page:int=Query(1,ge=1,description="page numbe
 async def get_single_credits_record(user_id:int=Depends(get_current_active_user_id),session:AsyncSession=Depends(get_async_session)):
     return await credits_object.get_single_credits_record(user_id=user_id,session=session)
 
-@credits_router.delete("/delete",status_code=status.HTTP_200_OK,description="Delete credit history of the current user",response_model= DeleteCreditsHistory)
+@credits_router.patch("/delete",status_code=status.HTTP_200_OK,description="Delete credit history of the current user",response_model= DeleteCreditsHistory)
 async def delete_credits_history_for_current_user(user_id:int=Depends(get_current_active_user_id),session:AsyncSession=Depends(get_async_session)):
     return await credits_object.delete_credits_history_db(user_id=user_id,session=session)

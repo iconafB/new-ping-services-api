@@ -1,16 +1,22 @@
 from fastapi import HTTPException,status,UploadFile
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio.session import AsyncSession
-from models.pings import PingsInput
+from models.pings import PingsInput,pinged_input
 from schemas.pings import PingPayload,PingsCellNumber,PingsPayloadResponse
 from utils.logging.logger import define_logger
-
+from crud.credits import CreditsCrudClass
 
 pings_logger=define_logger("pings_logger","logs/pings_route.log")
-
+credits_object=CreditsCrudClass()
 class PingsCrudClass:
     #load pings payload
-    async def load_pings_payload_crud(pings_payload:PingPayload,user_id:int,session:AsyncSession)->PingsPayloadResponse:
+    async def load_pings_payload_crud(self,pings_payload:PingPayload,user_id:int,session:AsyncSession)->PingsPayloadResponse:
         try:
+            # before loading pings, check if the credits balance matches
+            # one ping per unit credit
+            # if the credits are insufficient reject the upload and tell the number of pings that can be processed
+            # send the pings to the pings service
+            # send the pings  to dedago
             return False
         except HTTPException:
             raise
@@ -18,9 +24,16 @@ class PingsCrudClass:
             pings_logger.exception(f"an internal server error occurred while load pings:{str(e)}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail="an internal server error occurred while loading pings")
 
-    async def load_pings_using_a_file_upload_crud(file:UploadFile,user_id:int,session:AsyncSession)->PingsPayloadResponse:
+    async def load_pings_using_a_file_upload_crud(self,file:UploadFile,user_id:int,session:AsyncSession)->PingsPayloadResponse:
         try:
-            return False
+            print("print the file object to ping")
+            print(file)
+            print()
+            print(f"print the user id:{user_id}")
+            print()
+            print("print the session")
+            print(session)
+            return True
         except HTTPException:
             raise
         except Exception as e:
@@ -28,9 +41,10 @@ class PingsCrudClass:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred while loading a pings file")
     
 
-    async def check_pings_status(pings_id:str,user_id:int,session:AsyncSession):
+    async def check_pings_status(self,pings_id:str,user_id:int,session:AsyncSession):
+       
         try:
-            return False
+           return
         except HTTPException:
             raise
         except Exception as e:
@@ -38,7 +52,7 @@ class PingsCrudClass:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred while checking pings status for pings_id:{pings_id} with user id:{user_id}")
 
 
-    async def fetch_pings_crud(pings_id:str,user_id:int,session:AsyncSession):
+    async def fetch_pings_crud(self,pings_id:str,user_id:int,session:AsyncSession):
         try:
             return False
         except HTTPException: 
@@ -46,3 +60,13 @@ class PingsCrudClass:
         except Exception as e:
             pings_logger.exception(f"an internal server error occurred while fetching pings for user:{user_id}:{str(e)}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while fetching pinggs for user:{user_id}")
+    
+    async def test_pings(self,session:AsyncSession):
+        stmt=select(pinged_input).limit(5)
+        try:
+            result_query=await session.execute(stmt)
+            return result_query.all()
+        
+        except Exception as e:
+            pings_logger.exception(f"an internal server error occurred:{str(e)}")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred")

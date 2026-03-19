@@ -1,8 +1,7 @@
 from sqlalchemy import String,Boolean,Integer,func,DateTime,ForeignKey
-from sqlalchemy.orm import Mapped,mapped_column,DeclarativeBase
+from sqlalchemy.orm import Mapped,mapped_column
 from datetime import datetime
-class Base(DeclarativeBase):
-    pass
+from config.database import Base
 
 class Branches(Base):
     

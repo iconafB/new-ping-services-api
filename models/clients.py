@@ -1,9 +1,7 @@
 from sqlalchemy import String,Boolean,Integer,Text,DateTime,func
 from sqlalchemy.orm import Mapped,mapped_column,DeclarativeBase
 from datetime import datetime
-
-class Base(DeclarativeBase):
-    pass
+from config.database import Base
 
 class Clients_Table(Base):
     __tablename__="clients_table"

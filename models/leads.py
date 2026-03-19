@@ -1,11 +1,11 @@
 from sqlalchemy import String,Boolean,func,DateTime
 from sqlalchemy.orm import DeclarativeBase,Mapped,mapped_column
 from datetime import datetime
-class Base(DeclarativeBase):
-    __table__="leads"
+from config.database import Base
     
 
 class Leads(Base):
+    __tablename__="leads_table"
     lead_name:Mapped[str]=mapped_column(String(255),nullable=True)
     last_aid:Mapped[int]=mapped_column(primary_key=True,autoincrement=True)
     first_nme:Mapped[str]=mapped_column(String(255),nullable=True)

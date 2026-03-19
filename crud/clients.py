@@ -54,7 +54,8 @@ class UsersCrudClass:
 class UsersAuthCrudClass:
     #register new user
     async def register_new_client_crud(self,client:CreateClient,session:AsyncSession)->CreateClientResponse:
-        print("enter the crud method")
+        print("enter the crud method and print the payload")
+        print(client)
         hashed_password=hash_password(client.password)
         client_query=select(Clients_Table).where(Clients_Table.email==client.email)
         try:
@@ -90,9 +91,10 @@ class UsersAuthCrudClass:
             access_toke_expires=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
             #create access token
             token=create_access_token(data={'user_id':result.client_id},expires_delta=access_toke_expires)
+            users_logger.info(f"log the token:{token}")
             #log user logged in 
             users_logger.info(f"user:{user_email} successfully logged in")
-            return Token(token=token,token_type='Bearer')
+            return Token(access_token=token,token_type='Bearer')
         
         except HTTPException:
             raise
@@ -101,3 +103,6 @@ class UsersAuthCrudClass:
             await session.rollback()
             users_logger.exception(f"an internal server error while login user:{str(e)}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred while login user")
+
+
+

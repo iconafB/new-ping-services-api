@@ -28,6 +28,7 @@ async def login_client(form_data:Annotated[OAuth2PasswordRequestForm,Depends()],
         1. email
         2. password
     """
+    print("enter login method")
     return await auth_service.login_client_crud(form_data,session)
 
 @auth_router.post("/admin/register")

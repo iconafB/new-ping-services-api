@@ -2,9 +2,7 @@ from sqlalchemy import String,Integer,func,Boolean,DateTime
 from sqlalchemy.orm import Mapped,mapped_column,DeclarativeBase
 from typing import List,Optional
 from datetime import datetime
-
-class Base(DeclarativeBase):
-    pass
+from config.database import Base
 
 class Admin(Base):
     __tablename__="admin"

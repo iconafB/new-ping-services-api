@@ -1,9 +1,8 @@
-from sqlalchemy import String,func,ForeignKey,Integer,text,Date
-from sqlalchemy.orm import DeclarativeBase,Mapped,mapped_column
+from sqlalchemy import String,func,ForeignKey,Integer,text,Date,Text
+from sqlalchemy.orm import Mapped,mapped_column
 from datetime import datetime,date
+from config.database import Base
 
-class Base(DeclarativeBase):
-    pass
 
 class PingsInput(Base):
     __tablename__="pings_input"
@@ -11,7 +10,13 @@ class PingsInput(Base):
     cell_number:Mapped[str]=mapped_column(String(10),nullable=False,unique=True)
     pinged_status:Mapped[str]=mapped_column(String(255),nullable=False)
     creaed_date:Mapped[datetime]=mapped_column(server_default=func.now())
-    pingted_by:Mapped[int]=mapped_column(Integer,ForeignKey("users.id"))
+    pinged_by:Mapped[int]=mapped_column(Integer,ForeignKey("clients_table.client_id"))
+
+class pinged_input(Base):
+    __tablename__="pinged_input"
+    cell_number:Mapped[str]=mapped_column(Text,primary_key=True)
+    extract_date:Mapped[str]=mapped_column(Text)
+
 
 class PingsOutputStatus(Base):
     __tablename__="pings_output_status"

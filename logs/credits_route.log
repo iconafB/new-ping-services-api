@@ -1,0 +1,123 @@
+2026-03-19 13:33:11,066 - credits_logger - INFO - user:7 added credits total:120
+2026-03-19 14:16:34,801 - credits_logger - INFO - user:7 loaded credits total:200
+2026-03-19 14:17:37,600 - credits_logger - ERROR - an internal server error occurred while using getting credit history:SQL expression element expected, got <class 'models.credits.Credits_History_Table'>.
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 764, in _literal_coercion
+    return elements.BindParameter(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        name, element, type_, unique=True, _is_crud=is_crud
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 2059, in __init__
+    self.type = type_api._resolve_value_to_type(check_value)
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\sqltypes.py", line 3911, in _resolve_value_to_type
+    raise exc.ArgumentError(
+        "Object %r is not legal as a SQL literal value" % (value,)
+    )
+sqlalchemy.exc.ArgumentError: Object <class 'models.credits.Credits_History_Table'> is not legal as a SQL literal value
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\credits.py", line 58, in get_all_credits_history_for_a_user
+    count_query=select(func.count(Credits_History_Table)).where(Credits_History_Table.created_by==user_id)
+                       ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\functions.py", line 993, in __call__
+    return func(*c, **o)
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\functions.py", line 1834, in __init__
+    super().__init__(expression, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\functions.py", line 1556, in __init__
+    coercions.expect(
+    ~~~~~~~~~~~~~~~~^
+        roles.ExpressionElementRole,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        apply_propagate_attrs=self,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 396, in expect
+    resolved = impl._literal_coercion(
+        element, argname=argname, **kw
+    )
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 768, in _literal_coercion
+    self._raise_for_expected(element, err=err)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 785, in _raise_for_expected
+    return super()._raise_for_expected(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        element, argname=argname, resolved=resolved, advice=advice, **kw
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 519, in _raise_for_expected
+    raise exc.ArgumentError(msg, code=code) from err
+sqlalchemy.exc.ArgumentError: SQL expression element expected, got <class 'models.credits.Credits_History_Table'>.
+2026-03-19 14:18:19,108 - credits_logger - INFO - user:7 loaded credits total:230
+2026-03-19 14:18:41,966 - credits_logger - INFO - user:7 loaded credits total:250
+2026-03-19 14:22:55,303 - credits_logger - INFO - user:8 added credits total:90
+2026-03-19 14:23:14,756 - credits_logger - INFO - user:8 loaded credits total:180
+2026-03-19 14:23:27,163 - credits_logger - ERROR - an internal server error occurred while using getting credit history:SQL expression element expected, got <class 'models.credits.Credits_History_Table'>.
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 764, in _literal_coercion
+    return elements.BindParameter(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        name, element, type_, unique=True, _is_crud=is_crud
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 2059, in __init__
+    self.type = type_api._resolve_value_to_type(check_value)
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\sqltypes.py", line 3911, in _resolve_value_to_type
+    raise exc.ArgumentError(
+        "Object %r is not legal as a SQL literal value" % (value,)
+    )
+sqlalchemy.exc.ArgumentError: Object <class 'models.credits.Credits_History_Table'> is not legal as a SQL literal value
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\credits.py", line 58, in get_all_credits_history_for_a_user
+    count_query=select(func.count(Credits_History_Table)).where(Credits_History_Table.created_by==user_id)
+                       ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\functions.py", line 993, in __call__
+    return func(*c, **o)
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\functions.py", line 1834, in __init__
+    super().__init__(expression, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\functions.py", line 1556, in __init__
+    coercions.expect(
+    ~~~~~~~~~~~~~~~~^
+        roles.ExpressionElementRole,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        apply_propagate_attrs=self,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 396, in expect
+    resolved = impl._literal_coercion(
+        element, argname=argname, **kw
+    )
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 768, in _literal_coercion
+    self._raise_for_expected(element, err=err)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 785, in _raise_for_expected
+    return super()._raise_for_expected(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        element, argname=argname, resolved=resolved, advice=advice, **kw
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 519, in _raise_for_expected
+    raise exc.ArgumentError(msg, code=code) from err
+sqlalchemy.exc.ArgumentError: SQL expression element expected, got <class 'models.credits.Credits_History_Table'>.
+2026-03-19 14:45:32,321 - credits_logger - INFO - Credits history for user 7 deleted successfully
+2026-03-19 14:46:00,474 - credits_logger - INFO - Credits history for user 7 deleted successfully
+2026-03-19 14:46:17,521 - credits_logger - INFO - Credits history for user 7 deleted successfully
+2026-03-19 14:53:37,995 - credits_logger - INFO - Credits history for user 7 deleted successfully
+2026-03-19 14:55:38,419 - credits_logger - INFO - Credits history for user 7 deleted successfully

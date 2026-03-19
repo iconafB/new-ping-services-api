@@ -1,5 +1,5 @@
 from pydantic import BaseModel,EmailStr
-
+from datetime import datetime
 class CreateClient(BaseModel):
     client_name:str
     email:EmailStr
@@ -8,9 +8,8 @@ class CreateClient(BaseModel):
 
 class CreateClientResponse(BaseModel):
     client_id:int
-    first_name:str
-    last_name:str
-    email:str
+    client_name:str
+    created_at:datetime
 
 class GetAllUsersResponse(BaseModel):
     pass

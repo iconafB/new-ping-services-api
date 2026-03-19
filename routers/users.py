@@ -2,7 +2,8 @@ from fastapi import APIRouter
 
 users_router=APIRouter(tags=["Users Routes"],prefix="/users")
 
-@users_router.post("/register")
+@users_router.post("/all")
+
 async def register_user():
     """
         Register a new user by providing the following fields:

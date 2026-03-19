@@ -9,12 +9,17 @@ from utils.csv_validators import validate_csv_file
 pings_router=APIRouter(tags=["PINGS ROUTES"],prefix="/pings")
 
 pings_crud=PingsCrudClass()
+
 @pings_router.post("",status_code=status.HTTP_201_CREATED,description="Load pings as a json payload object",response_model=PingsPayloadResponse)
 async def load_pings_payload(pings_payload:PingPayload,user_id=Depends(get_current_active_user_id),session:AsyncSession=Depends(get_async_session)):
     return await pings_crud.load_pings_payload_crud(pings_payload,user_id)
 
+@pings_router.get("/test",status_code=status.HTTP_200_OK)
+async def test_pings_db(session:AsyncSession=Depends(get_async_session)):
+    return await pings_crud.test_pings(session=session)
+
 #load pings
-@pings_router.post("/file",status_code=status.HTTP_201_CREATED,description="Upload pings in a csv file",response_model=PingsPayloadResponse)
+@pings_router.post("/file",status_code=status.HTTP_201_CREATED,description="Upload file with cell numbers to ping")
 async def load_file_pings(file:UploadFile=File(...,description="Upload a csv file with cell numbers to pings"),user_id=Depends(get_current_active_user_id),session:AsyncSession=Depends(get_async_session)):
     """
         load a file with cell numbers to be pinged,file type should be as follows
@@ -24,7 +29,11 @@ async def load_file_pings(file:UploadFile=File(...,description="Upload a csv fil
     """
     #file validation logic
     validate_csv_file(file=file)
-    return await pings_crud.load_pings_using_a_file_upload_crud(file=file,user_id=user_id)
+    print("print the uploaded file")
+    print(file)
+    return await pings_crud.load_pings_using_a_file_upload_crud(file=file,user_id=user_id,session=session)
+
+
 
 #get pings
 @pings_router.get("",status_code=status.HTTP_200_OK,description="Fetch pings by providing pings_id")

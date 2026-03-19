@@ -1,6 +1,6 @@
 from fastapi import status,HTTPException
 from sqlalchemy.ext.asyncio.session import AsyncSession
-from sqlalchemy import select,func
+from sqlalchemy import select,func,update
 from math import ceil
 from utils.logging.logger import define_logger
 from models.credits import Credits,Credits_History_Table
@@ -49,11 +49,12 @@ class CreditsCrudClass:
     
     # get all credits, credits history, this history should be paginated
     async def get_all_credits_history_for_a_user(self,page:int,page_size:int,user_id:int,session:AsyncSession)->UserCreditsHistoryResponse:
+        print(f"print the currently logged in user:{user_id}")
         try:
             offset=(page - 1)*page_size
             base_query=select(Credits_History_Table)
-            count_query=select(func.count(Credits_History_Table)).where(Credits_History_Table.created_by==user_id)
-            base_query=(base_query.order_by(Credits_History_Table.created_at.desc()).offset(offset).limit(page_size))
+            count_query=select(func.count(Credits_History_Table.history_id)).where(Credits_History_Table.created_by==user_id)
+            base_query=(base_query.order_by(Credits_History_Table.created_at.desc()).where(Credits_History_Table.created_by==user_id).offset(offset).limit(page_size))
             total_records_result=await session.execute(count_query)
             total_records=total_records_result.scalar_one()
             history_result=await session.execute(base_query)
@@ -81,6 +82,8 @@ class CreditsCrudClass:
         try:
             credits=await session.execute(credits_stmt)
             results=credits.scalar_one_or_none()
+            if results.is_active==False:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail=f"No active credit balance for user:{user_id}")
             if results is None:
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"user:{user_id} has no credits history")
             return CreateCreditsResponse(credits_id=results.credits_id,credits_total=results.credits_total,created_by=results.created_by)
@@ -91,19 +94,27 @@ class CreditsCrudClass:
             credits_logger.exception(f"an internal server error occurred while get credits records:{user_id},{str(e)}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred while fetching credits record for user:{user_id}")
     
-    # remove credits history
+    # remove credits history,soft delete
+
     async def delete_credits_history_db(self,user_id:int,session:AsyncSession):
-        credits_stmt=select(Credits_History_Table).where(Credits_History_Table.created_by==user_id)
+        credits_history_stmt=select(Credits_History_Table).where(Credits_History_Table.created_by==user_id)
+        credits_stmt=select(Credits).where(Credits.created_by==user_id).where(Credits.is_active==True)
         try:
-            result=await session.execute(credits_stmt)
-            credit_history=result.scalar_one_or_none()
-            if credit_history is None:
+            result=await session.execute(credits_history_stmt)
+            credit_history=result.scalars().fetchall()
+            if not credit_history:
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"record does not exist")
-            await session.delete(credit_history)
+            update_stmt=(update(Credits_History_Table).where(Credits_History_Table.created_by==user_id).values(is_active=False))
+            await session.execute(update_stmt)
+            current_credits_balance=await session.execute(credits_stmt)
+            credit_balance_result=current_credits_balance.scalar_one_or_none()
+            #this is debatable
+            if credit_balance_result is None:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail=f"The current user:{user_id} has not active balance")
+            credit_balance_result.is_active=False
             await session.commit()
             credits_logger.info(f"Credits history for user {user_id} deleted successfully")
             return DeleteCreditsHistory(message=f"Credits history for user {user_id} deleted successfully")
-        
         except HTTPException:
             raise
 
