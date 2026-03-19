@@ -4,8 +4,7 @@ from crud.pings import PingsCrudClass
 from config.database import get_async_session
 from schemas.pings import PingPayload,PingsPayloadResponse
 from utils.auth.security import get_current_active_user_id
-from utils.constants import ALLOWED_CSV_CONTENT_TYPES
-from utils.csv_validators import validate_csv_file
+from utils.file_helpers.csv_validators import validate_csv_files
 pings_router=APIRouter(tags=["PINGS ROUTES"],prefix="/pings")
 
 pings_crud=PingsCrudClass()
@@ -28,10 +27,10 @@ async def load_file_pings(file:UploadFile=File(...,description="Upload a csv fil
         3. excel
     """
     #file validation logic
-    validate_csv_file(file=file)
+    csv_file=await validate_csv_files(file=file)
     print("print the uploaded file")
-    print(file)
-    return await pings_crud.load_pings_using_a_file_upload_crud(file=file,user_id=user_id,session=session)
+    print(csv_file)
+    return await pings_crud.load_pings_using_a_file_upload_crud(file=csv_file,user_id=user_id,session=session)
 
 
 

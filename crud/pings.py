@@ -70,3 +70,5 @@ class PingsCrudClass:
         except Exception as e:
             pings_logger.exception(f"an internal server error occurred:{str(e)}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred")
+        
+
