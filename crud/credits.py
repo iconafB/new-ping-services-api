@@ -49,7 +49,6 @@ class CreditsCrudClass:
     
     # get all credits, credits history, this history should be paginated
     async def get_all_credits_history_for_a_user(self,page:int,page_size:int,user_id:int,session:AsyncSession)->UserCreditsHistoryResponse:
-        print(f"print the currently logged in user:{user_id}")
         try:
             offset=(page - 1)*page_size
             base_query=select(Credits_History_Table)
@@ -60,9 +59,8 @@ class CreditsCrudClass:
             history_result=await session.execute(base_query)
             history_records=history_result.scalars().all()
             total_pages=ceil(total_records / page_size) if total_records > 0 else 1
-
             return UserCreditsHistoryResponse(
-            items=[UserCreditsHistoryItem.model_validate(record)for record in history_records],
+            items=[UserCreditsHistoryItem.model_validate(record) for record in history_records],
             page=page,
             page_size=page_size,
             total_records=total_records,

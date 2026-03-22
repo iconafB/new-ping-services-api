@@ -53,3 +53,54 @@ TypeError: unhashable type: 'list'
 2026-03-19 15:41:53,887 - users_logger - INFO - user:7 with email:test_client7@gmail.com logged in
 2026-03-19 15:41:53,887 - users_logger - INFO - log the token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo3LCJleHAiOjE3NzM5Mjk1MTN9.0r_SrHEgAKSPmvQKuz7u12TrNVkIz-3X4uiMbqeaFvI
 2026-03-19 15:41:53,888 - users_logger - INFO - user:test_client7@gmail.com successfully logged in
+2026-03-22 20:28:27,890 - users_logger - INFO - new cleint:sunday_test,with email:user@gmail.com and client id:9 registered
+2026-03-22 20:29:37,760 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-22 20:29:37,761 - users_logger - INFO - log the token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5LCJleHAiOjE3NzQyMDU5Nzd9.tXd9pFLEjfcFDY_-RiRqrvcgjRrwpNi6ksoVwdfQL-c
+2026-03-22 20:29:37,762 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-22 20:39:28,157 - users_logger - ERROR - an internal server error occurred while fetching users:1 validation error for ClientsSchema
+  Input should be a valid dictionary or instance of ClientsSchema [type=model_type, input_value=<models.clients.Clients_T...t at 0x000001C317F8FA10>, input_type=Clients_Table]
+    For further information visit https://errors.pydantic.dev/2.12/v/model_type
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\clients.py", line 35, in get_all_clients
+    return GetAllClientsSchema(total=total_records,page=page,page_size=page_size,results=[ClientsSchema.model_validate(client) for client in clients])
+                                                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 716, in model_validate
+    return cls.__pydantic_validator__.validate_python(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        obj,
+        ^^^^
+    ...<5 lines>...
+        by_name=by_name,
+        ^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for ClientsSchema
+  Input should be a valid dictionary or instance of ClientsSchema [type=model_type, input_value=<models.clients.Clients_T...t at 0x000001C317F8FA10>, input_type=Clients_Table]
+    For further information visit https://errors.pydantic.dev/2.12/v/model_type
+2026-03-22 20:41:40,626 - users_logger - ERROR - an internal server error occurred while fetching users:1 validation error for AllClientsSchema
+  Input should be a valid dictionary or instance of AllClientsSchema [type=model_type, input_value=<models.clients.Clients_T...t at 0x0000021C35C33A10>, input_type=Clients_Table]
+    For further information visit https://errors.pydantic.dev/2.12/v/model_type
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\clients.py", line 35, in get_all_clients
+    return GetAllClientsSchema(total=total_records,page=page,page_size=page_size,results=[AllClientsSchema.model_validate(client) for client in clients])
+                                                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 716, in model_validate
+    return cls.__pydantic_validator__.validate_python(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        obj,
+        ^^^^
+    ...<5 lines>...
+        by_name=by_name,
+        ^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for AllClientsSchema
+  Input should be a valid dictionary or instance of AllClientsSchema [type=model_type, input_value=<models.clients.Clients_T...t at 0x0000021C35C33A10>, input_type=Clients_Table]
+    For further information visit https://errors.pydantic.dev/2.12/v/model_type
+2026-03-22 20:54:51,859 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-22 20:54:51,860 - users_logger - INFO - log the token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5LCJleHAiOjE3NzQyMDc0OTF9.rKag_tKIrrjvzy40jD5qaVsNxKC49wsC_I8tI0rA9CY
+2026-03-22 20:54:51,861 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-22 21:08:32,757 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-22 21:08:32,759 - users_logger - INFO - log the token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5LCJleHAiOjE3NzQyMDgzMTJ9.aWb9rPg7-QownQSuxofLiI1aobIzT56UIKrZsntihwE
+2026-03-22 21:08:32,760 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-22 21:08:48,838 - users_logger - INFO - client:5 has been deleted

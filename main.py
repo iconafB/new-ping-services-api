@@ -7,6 +7,7 @@ from contextlib import asynccontextmanager
 from routers.credits import credits_router
 from routers.auth import auth_router
 from routers.pings import pings_router
+from routers.clients import clients_router
 
 @asynccontextmanager
 async def lifespan(app:FastAPI):
@@ -21,3 +22,4 @@ app=FastAPI(title="CLIENTS PINGS API SERVICE",lifespan=lifespan)
 app.include_router(credits_router)
 app.include_router(auth_router)
 app.include_router(pings_router)
+app.include_router(clients_router)
