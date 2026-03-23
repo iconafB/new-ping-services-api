@@ -5,19 +5,39 @@ from models.pings import PingsInput,pinged_input
 from schemas.pings import PingPayload,PingsCellNumber,PingsPayloadResponse
 from utils.logging.logger import define_logger
 from crud.credits import CreditsCrudClass
+from services.cell_number_validation import validate_sa_cell_numbers
 
 pings_logger=define_logger("pings_logger","logs/pings_route.log")
 credits_object=CreditsCrudClass()
 class PingsCrudClass:
+    #one credit per single ping
     #load pings payload
-    async def load_pings_payload_crud(self,pings_payload:PingPayload,user_id:int,session:AsyncSession)->PingsPayloadResponse:
+    async def load_pings_payload_crud(self,pings:PingPayload,user_id:int,session:AsyncSession)->PingsPayloadResponse:
         try:
             # before loading pings, check if the credits balance matches
+            credits_record=await credits_object.get_single_credits_record(user_id=user_id,session=session)
+            credits=credits_record.credits_total
+            pings_length=len(pings.cell_numbers)
+
+            if credits==0:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail=f"insufficient credits balannce:{credits} for user:{user_id} to send the requested pings payload")
+            # validate the cell numbers
+            validated_cell_numbers=validate_sa_cell_numbers(pings.cell_numbers)
+            print("print the validated")
+            print(validated_cell_numbers)
+            invalid_count=validated_cell_numbers['invalid_count']
+            validated_cell_numbers=validated_cell_numbers['valid_numbers']
+            valid_count=validated_cell_numbers['valid_count']
             # one ping per unit credit
             # if the credits are insufficient reject the upload and tell the number of pings that can be processed
             # send the pings to the pings service
             # send the pings  to dedago
-            return False
+            pings_logger.info(f"valid count cell numbers:{valid_count}, and invalid count:{invalid_count}")
+            return {
+                "valid_count":valid_count,
+                "invalid_count":invalid_count,
+                "cell_numbers":validated_cell_numbers
+            }
         except HTTPException:
             raise
         except Exception as e:

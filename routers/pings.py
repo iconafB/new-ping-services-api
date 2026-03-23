@@ -10,8 +10,8 @@ pings_router=APIRouter(tags=["PINGS ROUTES"],prefix="/pings")
 pings_crud=PingsCrudClass()
 
 @pings_router.post("",status_code=status.HTTP_201_CREATED,description="Load pings as a json payload object",response_model=PingsPayloadResponse)
-async def load_pings_payload(pings_payload:PingPayload,user_id=Depends(get_current_active_user_id),session:AsyncSession=Depends(get_async_session)):
-    return await pings_crud.load_pings_payload_crud(pings_payload,user_id)
+async def load_pings_payload(pings:PingPayload,user_id=Depends(get_current_active_user_id),session:AsyncSession=Depends(get_async_session)):
+    return await pings_crud.load_pings_payload_crud(pings,user_id,session=session)
 
 @pings_router.get("/test",status_code=status.HTTP_200_OK)
 async def test_pings_db(session:AsyncSession=Depends(get_async_session)):

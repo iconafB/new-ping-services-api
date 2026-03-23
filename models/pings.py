@@ -9,7 +9,7 @@ class PingsInput(Base):
     ping_pk:Mapped[int]=mapped_column(primary_key=True,autoincrement=True)
     cell_number:Mapped[str]=mapped_column(String(10),nullable=False,unique=True)
     pinged_status:Mapped[str]=mapped_column(String(255),nullable=False)
-    creaed_date:Mapped[datetime]=mapped_column(server_default=func.now())
+    createdd_date:Mapped[datetime]=mapped_column(server_default=func.now())
     pinged_by:Mapped[int]=mapped_column(Integer,ForeignKey("clients_table.client_id"))
 
 class pinged_input(Base):

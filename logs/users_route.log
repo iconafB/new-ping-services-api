@@ -104,3 +104,6 @@ pydantic_core._pydantic_core.ValidationError: 1 validation error for AllClientsS
 2026-03-22 21:08:32,759 - users_logger - INFO - log the token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5LCJleHAiOjE3NzQyMDgzMTJ9.aWb9rPg7-QownQSuxofLiI1aobIzT56UIKrZsntihwE
 2026-03-22 21:08:32,760 - users_logger - INFO - user:user@gmail.com successfully logged in
 2026-03-22 21:08:48,838 - users_logger - INFO - client:5 has been deleted
+2026-03-23 07:57:59,401 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-23 07:57:59,401 - users_logger - INFO - log the token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5LCJleHAiOjE3NzQyNDcyNzl9.XrYIfIpULGDMrURawCsFdVi8DFQaaXMKqkczly3c6VY
+2026-03-23 07:57:59,402 - users_logger - INFO - user:user@gmail.com successfully logged in

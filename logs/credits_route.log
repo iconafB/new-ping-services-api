@@ -122,3 +122,4 @@ sqlalchemy.exc.ArgumentError: SQL expression element expected, got <class 'model
 2026-03-19 14:53:37,995 - credits_logger - INFO - Credits history for user 7 deleted successfully
 2026-03-19 14:55:38,419 - credits_logger - INFO - Credits history for user 7 deleted successfully
 2026-03-22 21:10:34,812 - credits_logger - INFO - user:9 added credits total:90
+2026-03-23 07:59:09,168 - credits_logger - INFO - user:9 loaded credits total:190

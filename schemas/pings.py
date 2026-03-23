@@ -5,7 +5,7 @@ class PingsCellNumber(BaseModel):
     cell_number:str
 
 class PingPayload(BaseModel):
-    payload:List[PingsCellNumber]
+    cell_numbers:list[str]
 
 class PingsPayloadResponse(BaseModel):
     number_of_pings_uploaded:int

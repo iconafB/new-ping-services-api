@@ -574,3 +574,19 @@ FROM pinged_input
  LIMIT $1::INTEGER]
 [parameters: (5,)]
 (Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-23 08:10:28,681 - pings_logger - ERROR - an internal server error occurred while load pings:object of type 'PingPayload' has no len()
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 20, in load_pings_payload_crud
+    pings_length=len(pings)
+TypeError: object of type 'PingPayload' has no len()
+2026-03-23 08:11:05,236 - pings_logger - ERROR - an internal server error occurred while load pings:object of type 'PingPayload' has no len()
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 20, in load_pings_payload_crud
+    pings_length=len(pings)
+TypeError: object of type 'PingPayload' has no len()
+2026-03-23 08:11:39,319 - pings_logger - ERROR - an internal server error occurred while load pings:list indices must be integers or slices, not str
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 28, in load_pings_payload_crud
+    valid_count=validated_cell_numbers['valid_count']
+                ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+TypeError: list indices must be integers or slices, not str
