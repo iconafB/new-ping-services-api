@@ -590,3 +590,80 @@ Traceback (most recent call last):
     valid_count=validated_cell_numbers['valid_count']
                 ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
 TypeError: list indices must be integers or slices, not str
+2026-03-23 08:13:40,223 - pings_logger - ERROR - an internal server error occurred while load pings:list indices must be integers or slices, not str
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 30, in load_pings_payload_crud
+    valid_count=validated_cell_numbers['valid_count']
+                ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+TypeError: list indices must be integers or slices, not str
+2026-03-23 08:18:30,772 - pings_logger - ERROR - an internal server error occurred while load pings:list indices must be integers or slices, not str
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 30, in load_pings_payload_crud
+    valid_count=validated_cell_numbers['valid_count']
+                ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+TypeError: list indices must be integers or slices, not str
+2026-03-23 08:21:17,388 - pings_logger - ERROR - an internal server error occurred while load pings:list indices must be integers or slices, not str
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 30, in load_pings_payload_crud
+    valid_count=validated_cell_numbers['valid_count']
+                ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+TypeError: list indices must be integers or slices, not str
+2026-03-23 08:24:01,817 - pings_logger - INFO - valid count cell numbers:1, and invalid count:0
+2026-03-23 08:25:05,822 - pings_logger - INFO - valid count cell numbers:1, and invalid count:0
+2026-03-23 08:25:55,751 - pings_logger - INFO - valid count cell numbers:1, and invalid count:0
+2026-03-23 08:30:50,871 - pings_logger - INFO - valid count cell numbers:1, and invalid count:0
+2026-03-23 08:31:16,955 - pings_logger - INFO - valid count cell numbers:2, and invalid count:0
+2026-03-23 08:31:47,154 - pings_logger - INFO - valid count cell numbers:2, and invalid count:1
+2026-03-23 08:32:21,077 - pings_logger - INFO - valid count cell numbers:2, and invalid count:1
+2026-03-23 08:32:21,078 - pings_logger - ERROR - an internal server error occurred while load pings:1 validation error for LoadPingPayload
+pinged_cell_numbers
+  Field required [type=missing, input_value={'valid_numbers_count': 2...7550153', '0817550154']}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 34, in load_pings_payload_crud
+    return LoadPingPayload(valid_numbers_count=valid_count,invalid_number_count=invalid_count,cell_numbers=valid_numbers)
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 250, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 1 validation error for LoadPingPayload
+pinged_cell_numbers
+  Field required [type=missing, input_value={'valid_numbers_count': 2...7550153', '0817550154']}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+2026-03-23 08:35:20,274 - pings_logger - INFO - valid count cell numbers:4, and invalid count:2
+2026-03-23 08:40:14,009 - pings_logger - INFO - valid count cell numbers:4, and invalid count:2
+2026-03-23 08:40:24,793 - pings_logger - INFO - valid count cell numbers:4, and invalid count:2
+2026-03-23 09:37:17,366 - pings_logger - INFO - valid count cell numbers:4, and invalid count:2
+2026-03-23 09:37:45,653 - pings_logger - INFO - valid count cell numbers:4, and invalid count:2
+2026-03-23 09:43:12,960 - pings_logger - INFO - valid count cell numbers:5, and invalid count:2
+2026-03-23 09:51:55,803 - pings_logger - INFO - valid count cell numbers:4, and invalid count:2
+2026-03-23 09:53:19,325 - pings_logger - INFO - valid count cell numbers:4, and invalid count:2
+2026-03-23 12:42:05,155 - pings_logger - INFO - valid count cell numbers:3, and invalid count:0
+2026-03-23 12:59:17,221 - pings_logger - INFO - valid count cell numbers:3, and invalid count:0
+2026-03-23 13:00:56,711 - pings_logger - INFO - valid count cell numbers:5, and invalid count:0
+2026-03-23 13:01:39,442 - pings_logger - INFO - valid count cell numbers:6, and invalid count:0
+2026-03-23 13:02:48,267 - pings_logger - INFO - valid count cell numbers:8, and invalid count:0
+2026-03-23 13:13:20,240 - pings_logger - INFO - valid count cell numbers:1, and invalid count:0
+2026-03-23 13:13:37,970 - pings_logger - INFO - valid count cell numbers:2, and invalid count:0
+2026-03-23 13:16:02,355 - pings_logger - INFO - valid count cell numbers:25, and invalid count:0
+2026-03-23 13:17:54,997 - pings_logger - INFO - valid count cell numbers:40, and invalid count:0
+2026-03-23 14:02:44,281 - pings_logger - INFO - valid count cell numbers:60, and invalid count:0
+2026-03-23 14:03:00,849 - pings_logger - INFO - valid count cell numbers:59, and invalid count:1
+2026-03-23 14:04:47,987 - pings_logger - INFO - valid count cell numbers:80, and invalid count:0
+2026-03-23 14:07:06,990 - pings_logger - INFO - valid count cell numbers:90, and invalid count:0
+2026-03-23 14:43:09,728 - pings_logger - INFO - valid count cell numbers:3000, and invalid count:0
+2026-03-23 14:49:54,335 - pings_logger - INFO - valid count cell numbers:15000, and invalid count:0
+2026-03-23 14:52:50,923 - pings_logger - INFO - valid count cell numbers:14999, and invalid count:1
+2026-03-23 15:49:42,555 - pings_logger - INFO - valid count cell numbers:3, and invalid count:0
+2026-03-23 15:52:24,424 - pings_logger - INFO - user:9 loaded pings records equal to:3
+2026-03-23 15:52:24,425 - pings_logger - INFO - valid count cell numbers:3, and invalid count:0
+2026-03-23 15:54:18,119 - pings_logger - INFO - user:9 loaded pings records equal to:3000
+2026-03-23 15:54:18,120 - pings_logger - INFO - valid count cell numbers:3000, and invalid count:0
+2026-03-23 15:55:38,480 - pings_logger - INFO - user:9 loaded pings records equal to:3
+2026-03-23 15:55:38,481 - pings_logger - INFO - valid count cell numbers:3, and invalid count:0
+2026-03-23 16:01:35,746 - pings_logger - INFO - user:9 loaded pings records equal to:15000
+2026-03-23 16:01:35,747 - pings_logger - INFO - valid count cell numbers:15000, and invalid count:0
+2026-03-23 16:22:51,477 - pings_logger - INFO - user:9 loaded pings records equal to:1
+2026-03-23 16:22:51,478 - pings_logger - INFO - valid count cell numbers:1, and invalid count:0
+2026-03-23 16:24:05,123 - pings_logger - INFO - user:9 loaded pings records equal to:3000
+2026-03-23 16:24:05,124 - pings_logger - INFO - valid count cell numbers:3000, and invalid count:0
+2026-03-23 16:24:53,132 - pings_logger - INFO - user:9 loaded pings records equal to:3000
+2026-03-23 16:24:53,133 - pings_logger - INFO - valid count cell numbers:3000, and invalid count:0

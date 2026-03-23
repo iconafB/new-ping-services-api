@@ -15,9 +15,7 @@ from utils.logging.logger import define_logger
 auth_logger=define_logger("auth_logger","logs/auth_route.log")
 ALGORITHM='HS256'
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
 oauth2_scheme=OAuth2PasswordBearer(tokenUrl="/auth/login")
-
 password_hash = PasswordHash.recommended()
 
 def hash_password(plain_password)->str:
@@ -41,7 +39,6 @@ def get_current_user_id(token: Annotated[str, Depends(oauth2_scheme)]):
     try:
         payload=jwt.decode(token,get_settings().SECRET_KEY,algorithms=[ALGORITHM])
         user_id=payload.get("user_id")
-        print(f"print the user:{user_id}")
         if user_id is None:
             raise credentials_exception
     except InvalidTokenError:

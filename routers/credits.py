@@ -4,7 +4,7 @@ from crud.credits import CreditsCrudClass
 from schemas.credits import CreateCreditsResponse,CreateCredits,UserCreditsHistoryResponse,DeleteCreditsHistory
 from utils.auth.security import get_current_active_user_id
 from config.database import get_async_session
-credits_router=APIRouter(tags=["CREDITS ROUTES"],prefix="/credits")
+credits_router=APIRouter(tags=["CREDITS SERVICE"],prefix="/credits")
 credits_object=CreditsCrudClass()
 
 #load credits
@@ -25,3 +25,19 @@ async def get_single_credits_record(user_id:int=Depends(get_current_active_user_
 @credits_router.patch("/delete",status_code=status.HTTP_200_OK,description="Delete credit history of the current user",response_model= DeleteCreditsHistory)
 async def delete_credits_history_for_current_user(user_id:int=Depends(get_current_active_user_id),session:AsyncSession=Depends(get_async_session)):
     return await credits_object.delete_credits_history_db(user_id=user_id,session=session)
+
+@credits_router.get("/withdrawals",status_code=status.HTTP_200_OK,summary="Get all the withdrawals",response_model=UserCreditsHistoryResponse)
+async def withdrawals(user_id:int=Depends(get_current_active_user_id),session:AsyncSession=Depends(get_async_session),page:int=Query(1,ge=1,description="Page Number"),page_size:int=Query(10,le=100,description="Number of items per unit page")):
+    """
+        Get all the credits withdrawals transactions for a client
+    """
+    return await credits_object.get_all_withdrawals(user_id=user_id,session=session,page=page,page_size=page_size)
+
+@credits_router.get("/deposits",status_code=status.HTTP_200_OK,summary="Get all the depoists",response_model=UserCreditsHistoryResponse)
+async def credits_deposits(user_id:int=Depends(get_current_active_user_id),session:AsyncSession=Depends(get_async_session),page:int=Query(1,ge=1,description="Page Number"),page_size:int=Query(10,le=100,description="Number of items per unit page")):
+    """
+        Get all the credits deposit transactions for a client
+    """
+    
+    return await credits_object.get_all_deposits(user_id=user_id,session=session,page=page,page_size=page_size)
+

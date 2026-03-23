@@ -171,7 +171,6 @@ class UsersAuthCrudClass:
             access_toke_expires=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
             #create access token
             token=create_access_token(data={'user_id':result.client_id},expires_delta=access_toke_expires)
-            users_logger.info(f"log the token:{token}")
             #log user logged in 
             users_logger.info(f"user:{user_email} successfully logged in")
             return Token(access_token=token,token_type='Bearer')

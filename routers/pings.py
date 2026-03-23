@@ -2,16 +2,19 @@ from fastapi import APIRouter,Depends,status,UploadFile,File,HTTPException
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from crud.pings import PingsCrudClass
 from config.database import get_async_session
-from schemas.pings import PingPayload,PingsPayloadResponse
+from schemas.pings import PingPayload,PingsPayloadResponse,LoadPingPayloadResponse
 from utils.auth.security import get_current_active_user_id
 from utils.file_helpers.csv_validators import validate_csv_files
 pings_router=APIRouter(tags=["PINGS ROUTES"],prefix="/pings")
 
 pings_crud=PingsCrudClass()
-
-@pings_router.post("",status_code=status.HTTP_201_CREATED,description="Load pings as a json payload object",response_model=PingsPayloadResponse)
+#,response_model=PingsPayloadResponse
+@pings_router.post("",status_code=status.HTTP_201_CREATED,summary="Load pings as a json payload object",response_model=LoadPingPayloadResponse)
 async def load_pings_payload(pings:PingPayload,user_id=Depends(get_current_active_user_id),session:AsyncSession=Depends(get_async_session)):
-    return await pings_crud.load_pings_payload_crud(pings,user_id,session=session)
+    """
+        Please note that duplicate cell numbers will be filtered out and not sent to the ping service
+    """
+    return await pings_crud.load_pings_payload_crud(pings=pings,user_id=user_id,session=session)
 
 @pings_router.get("/test",status_code=status.HTTP_200_OK)
 async def test_pings_db(session:AsyncSession=Depends(get_async_session)):

@@ -107,3 +107,32 @@ pydantic_core._pydantic_core.ValidationError: 1 validation error for AllClientsS
 2026-03-23 07:57:59,401 - users_logger - INFO - user:9 with email:user@gmail.com logged in
 2026-03-23 07:57:59,401 - users_logger - INFO - log the token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5LCJleHAiOjE3NzQyNDcyNzl9.XrYIfIpULGDMrURawCsFdVi8DFQaaXMKqkczly3c6VY
 2026-03-23 07:57:59,402 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-23 08:30:33,730 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-23 08:30:33,730 - users_logger - INFO - log the token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5LCJleHAiOjE3NzQyNDkyMzN9.ayfbN842rUNQOJ02awitJoRGaEGA78zva8Ub8Zxx_uA
+2026-03-23 08:30:33,730 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-23 08:33:37,455 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-23 08:33:37,456 - users_logger - INFO - log the token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5LCJleHAiOjE3NzQyNDk0MTd9.NPtthegKR2GZrqLX0V9d6-8fzvEoi7w7eHaAmu3je-w
+2026-03-23 08:33:37,456 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-23 09:37:13,222 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-23 09:37:13,223 - users_logger - INFO - log the token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5LCJleHAiOjE3NzQyNTMyMzN9.hbyYq4-Dewcn7wWG9_O3eEK670bAvD3ZEOto__2zFlI
+2026-03-23 09:37:13,223 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-23 11:27:30,847 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-23 11:27:30,847 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-23 12:09:09,690 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-23 12:09:09,691 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-23 12:41:58,477 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-23 12:41:58,478 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-23 13:13:15,056 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-23 13:13:15,057 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-23 14:02:37,465 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-23 14:02:37,466 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-23 14:40:58,759 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-23 14:40:58,760 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-23 15:03:49,244 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-23 15:03:49,245 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-23 15:48:06,172 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-23 15:48:06,173 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-23 15:58:16,941 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-23 15:58:16,942 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-23 16:11:46,991 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-23 16:11:46,992 - users_logger - INFO - user:user@gmail.com successfully logged in

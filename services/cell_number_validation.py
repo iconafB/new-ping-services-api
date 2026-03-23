@@ -1,7 +1,6 @@
 import re
 from typing import Iterable
 
-
 def validate_sa_cell_numbers(cell_numbers: Iterable[str]) -> dict:
     """
     Validate a list of South African cell numbers.
@@ -15,6 +14,7 @@ def validate_sa_cell_numbers(cell_numbers: Iterable[str]) -> dict:
     """
 
     valid_numbers = []
+    seen = set()
     invalid_count = 0
 
     for raw in cell_numbers:
@@ -38,7 +38,9 @@ def validate_sa_cell_numbers(cell_numbers: Iterable[str]) -> dict:
             local_format = "0" + normalized[2:]
 
         if is_valid:
-            valid_numbers.append(local_format)
+            if local_format not in seen:
+                valid_numbers.append(local_format)
+                seen.add(local_format)
         else:
             invalid_count += 1
 
