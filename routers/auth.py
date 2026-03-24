@@ -11,13 +11,14 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 auth_router=APIRouter(tags=["AUTHENTICATION ROUTES"],prefix="/auth")
 auth_service=UsersAuthCrudClass()
 
-@auth_router.post("/register",status_code=status.HTTP_201_CREATED,description="Register new client",response_model=CreateClientResponse)
+@auth_router.post("/register",status_code=status.HTTP_201_CREATED,summary="Register new client",response_model=CreateClientResponse)
 async def register_client(client:CreateClient,session:AsyncSession=Depends(get_async_session)):
     """
         Register a new user by providing the following fields:
         1. email
         2. password
         3. client name
+        4. Ubhedeke wena!!!
     """
     return await auth_service.register_new_client_crud(client,session)
 

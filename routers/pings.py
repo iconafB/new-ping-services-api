@@ -12,7 +12,7 @@ pings_crud=PingsCrudClass()
 @pings_router.post("",status_code=status.HTTP_201_CREATED,summary="Load pings as a json payload object",response_model=LoadPingPayloadResponse)
 async def load_pings_payload(pings:PingPayload,user_id=Depends(get_current_active_user_id),session:AsyncSession=Depends(get_async_session)):
     """
-        Please note that duplicate cell numbers will be filtered out and not sent to the ping service
+        Please note that duplicate cell numbers will be filtered out and not sent to the ping machine
     """
     return await pings_crud.load_pings_payload_crud(pings=pings,user_id=user_id,session=session)
 
@@ -26,8 +26,7 @@ async def load_file_pings(file:UploadFile=File(...,description="Upload a csv fil
     """
         load a file with cell numbers to be pinged,file type should be as follows
         1. csv
-        2. text
-        3. excel
+        2. excel
     """
     #file validation logic
     csv_file=await validate_csv_files(file=file)
@@ -46,3 +45,5 @@ async def get_pings_loaded(user_id:int=Depends(get_current_active_user_id),sessi
 @pings_router.get("/status",status_code=status.HTTP_200_OK,description="Check the status of the pings submitted by providing the pings id")
 async def check_pings_status(user_id:int=Depends(get_current_active_user_id),session:AsyncSession=Depends(get_async_session)):
     return 
+
+#

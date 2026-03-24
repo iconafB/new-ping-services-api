@@ -136,3 +136,11 @@ pydantic_core._pydantic_core.ValidationError: 1 validation error for AllClientsS
 2026-03-23 15:58:16,942 - users_logger - INFO - user:user@gmail.com successfully logged in
 2026-03-23 16:11:46,991 - users_logger - INFO - user:9 with email:user@gmail.com logged in
 2026-03-23 16:11:46,992 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-23 16:57:54,119 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-23 16:57:54,120 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-24 08:02:11,722 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-24 08:02:11,723 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-24 08:28:19,831 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-24 08:28:19,832 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-24 08:53:32,425 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-24 08:53:32,425 - users_logger - INFO - user:user@gmail.com successfully logged in

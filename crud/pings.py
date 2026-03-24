@@ -5,8 +5,8 @@ from models.pings import PingsInput,pinged_input
 from schemas.pings import PingPayload,PingsCellNumber,PingsPayloadResponse,LoadPingPayloadResponse
 from utils.logging.logger import define_logger
 from crud.credits import CreditsCrudClass
-from services.cell_number_validation import validate_sa_cell_numbers
-from services.pings import bulk_insert_pings_input
+from services.cell_number_validations.cell_number_validation import validate_sa_cell_numbers
+from services.pings.pings import bulk_insert_pings_input
 
 pings_logger=define_logger("pings_logger","logs/pings_route.log")
 credits_object=CreditsCrudClass()

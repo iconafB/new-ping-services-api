@@ -1,15 +1,22 @@
 from fastapi import APIRouter,Depends,status,Query
 from sqlalchemy.ext.asyncio import AsyncSession
+from datetime import date
 from crud.credits import CreditsCrudClass
 from schemas.credits import CreateCreditsResponse,CreateCredits,UserCreditsHistoryResponse,DeleteCreditsHistory
 from utils.auth.security import get_current_active_user_id
 from config.database import get_async_session
+from services.clients.clients import ClientService
+from services.branches.braches import BrachesService
+
 credits_router=APIRouter(tags=["CREDITS SERVICE"],prefix="/credits")
 credits_object=CreditsCrudClass()
 
 #load credits
-@credits_router.post("/load",status_code=status.HTTP_201_CREATED,description="Load credits",response_model=CreateCreditsResponse)
+@credits_router.post("/load",status_code=status.HTTP_201_CREATED,summary="Load credits",response_model=CreateCreditsResponse)
 async def load_credits(credits_amount:CreateCredits,user_id:int=Depends(get_current_active_user_id),session:AsyncSession=Depends(get_async_session)):
+    """
+        Top up credits for the pings service
+    """
     return await credits_object.load_client_credits(credits_amount=credits_amount.credits_amount,user_id=user_id,session=session)
 
 #get credits history for a user
@@ -38,6 +45,16 @@ async def credits_deposits(user_id:int=Depends(get_current_active_user_id),sessi
     """
         Get all the credits deposit transactions for a client
     """
-    
     return await credits_object.get_all_deposits(user_id=user_id,session=session,page=page,page_size=page_size)
 
+
+
+@credits_router.get("/download",status_code=status.HTTP_200_OK,summary="Download credits history",responses={200:{
+    "description":"Download credits statements as PDF",
+    "content":{"application/pdf":{}}
+}})
+async def download_credits_statements_pdf(user_id:int=Depends(get_current_active_user_id),state_date:date | None=Query(default=None,description="start date for credits statement"),end_date:date|None=Query(default=None,description="End date for credits statements"),session:AsyncSession=Depends(get_async_session)):
+    """
+        Download statemenets of credits history in pdf format
+    """
+    return "Download statement"
