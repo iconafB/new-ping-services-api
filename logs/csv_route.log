@@ -1,0 +1,11 @@
+2026-03-25 11:31:26,832 - csv_logger - ERROR - an exception occurred while extracting data from a csv file:tuple for startswith must only contain str, not int
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\services\files_services\csv_services.py", line 17, in data_extraction
+    cleaned_cell_numbers:list[str]=self.exctract_clean_sa_cell_numbers(df)
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\services\files_services\csv_services.py", line 69, in exctract_clean_sa_cell_numbers
+    normalized_cell_number=self.normalize_csv_numbers(row)
+  File "C:\Users\iconaf\Documents\new-ping-service-api\services\files_services\csv_services.py", line 55, in normalize_csv_numbers
+    if len(digits)==11 and digits.startswith(("276","277",278)):
+                           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+TypeError: tuple for startswith must only contain str, not int

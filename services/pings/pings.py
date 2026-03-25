@@ -5,6 +5,7 @@ from models.pings import PingsInput
 from utils.logging.logger import define_logger
 pings_logger=define_logger("pings_logger","logs/pings_route.log")
 
+
 #Put everything into a class
 
 def chunked(values: list[str], size: int):
@@ -28,16 +29,16 @@ async def bulk_insert_pings_input(session: AsyncSession,cell_numbers: list[str],
             stmt=(pg_insert(PingsInput).values(rows).on_conflict_do_nothing(index_elements=[PingsInput.cell_number]).returning(PingsInput.ping_pk))
             result = await session.execute(stmt)
             inserted_count += len(result.scalars().all())
-
         await session.commit()
         cell_numbers_length=len(cell_numbers)
         pings_logger.info(f"user:{user_id} loaded pings records equal to:{cell_numbers_length}")
+        
         return {
             "total_received": cell_numbers_length,
             "inserted_into_db": inserted_count,
             "already_existing_in_db": len(cell_numbers) - inserted_count,
         }
-
+    
     except Exception as e:
         await session.rollback()
         pings_logger.exception(f"an exception occurred while loading records into the database:{str(e)}")

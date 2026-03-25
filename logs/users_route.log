@@ -178,3 +178,15 @@ client_name
 2026-03-25 08:13:19,120 - users_logger - INFO - user:user@gmail.com successfully logged in
 2026-03-25 09:20:18,958 - users_logger - INFO - user:9 with email:user@gmail.com logged in
 2026-03-25 09:20:18,959 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-25 09:42:36,828 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-25 09:42:36,829 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-25 10:13:58,102 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-25 10:13:58,103 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-25 11:23:53,382 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-25 11:23:53,382 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-25 12:24:25,282 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-25 12:24:25,283 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-25 12:34:17,345 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-25 12:34:17,346 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-25 14:19:54,700 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-25 14:19:54,701 - users_logger - INFO - user:user@gmail.com successfully logged in
