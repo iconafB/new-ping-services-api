@@ -12,10 +12,16 @@ from reportlab.lib.enums import TA_RIGHT,TA_CENTER
 from reportlab.lib.units import mm
 from reportlab.platypus import (SimpleDocTemplate,Paragraph,Spacer,Table,TableStyle)
 from reportlab.pdfgen import canvas
+from crud.clients import ClientsCrudClass
 from utils.logging.logger import define_logger
 from models.credits import Credits_History_Table
 
 statements_logger=define_logger("statements_logger","logs/statements_route.log")
+
+# This is tight coupling breaking SOLID principles
+
+clients_object=ClientsCrudClass()
+
 
 def money(value: Decimal | int | float) -> str:
     return f"{Decimal(value):,.2f}"
@@ -59,15 +65,22 @@ def pdf_header_footer(canvas, doc):
 
 
 class CreditsDocuments:
-    
-    async def download_credits_statements_success(self,user_id:int,start_date:date,end_date:date,session:AsyncSession):
 
+    def __init__(self,clients:ClientsCrudClass):
+        self.clients=clients
+    async def get_current_client(self,client_id:int,session:AsyncSession):
+        return await self.clients.get_single_client_crud(client_id=client_id,session=session)
+        
+    async def download_credits_pdf_statements(self,user_id:int,start_date:date,end_date:date,session:AsyncSession):
+        
         try:
+            current_client=await self.get_current_client(client_id=user_id,session=session)
             #build date boundaries
             start_dt=None
             end_dt=None
             if start_date:
                 start_dt=datetime.combine(start_date,time.min).replace(tzinfo=timezone.utc)
+            
             if end_date:
                 end_dt=datetime.combine(end_date,time.max).replace(tzinfo=timezone.utc)
             #Opening balance = all signed transactions before start_date
@@ -75,6 +88,7 @@ class CreditsDocuments:
             opening_stmt=select(Credits_History_Table.credits_amount,Credits_History_Table.transaction_type).where(Credits_History_Table.created_by==user_id)
             if start_dt:
                 opening_stmt=opening_stmt.where(Credits_History_Table.created_at< start_dt)
+            
             opening_result=await session.execute(opening_stmt)
             opening_rows=opening_result.all()
 
@@ -85,6 +99,7 @@ class CreditsDocuments:
 
             if start_dt:
                 tx_stmt=tx_stmt.where(Credits_History_Table.created_at >=start_dt)
+            
             if end_dt:
                 tx_stmt=tx_stmt.where(Credits_History_Table.created_at <= end_dt)
 
@@ -172,7 +187,7 @@ class CreditsDocuments:
 
             generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
-            elements.append(Paragraph(f"User ID: {user_id}", styles["Normal"]))
+            elements.append(Paragraph(f"Client Name: {current_client.client_name}", styles["Normal"]))
             elements.append(Paragraph(period_label, styles["Normal"]))
             elements.append(Paragraph(f"Generated at: {generated_at}", styles["SmallMuted"]))
             elements.append(Spacer(1, 10))
@@ -232,7 +247,8 @@ class CreditsDocuments:
             document.build(elements,onFirstPage=pdf_header_footer,onLaterPages=pdf_header_footer)
             pdf_buffer.seek(0)
             filename = f"credits_statement_{user_id}_{datetime.now(timezone.utc):%Y%m%d_%H%M%S}.pdf"
-        
+            statements_logger.info(f"client:{current_client.client_name} with email:{current_client.client_email} downloaded transaction history document")
+
             return StreamingResponse(pdf_buffer,media_type="application/pdf",headers={"Content-Disposition": f'attachment; filename="{filename}"'})
         
         except Exception as e:

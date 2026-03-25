@@ -1,4 +1,5 @@
-from sqlalchemy import String,func,ForeignKey,Integer,text,Date,Text
+from sqlalchemy import String,func,ForeignKey,Integer,text,Date,Text,DateTime
+
 from sqlalchemy.orm import Mapped,mapped_column
 from datetime import datetime,date
 from config.database import Base
@@ -29,3 +30,12 @@ class PingsOutputStatus(Base):
     model_output:Mapped[str]=mapped_column(String,nullable=False)
     cli:Mapped[str]=mapped_column(String(11),nullable=False)
 
+
+
+class ClientPingsOverview(Base):
+    __tablename__="client_pings_overview"
+    pk:Mapped[int]=mapped_column(primary_key=True,autoincrement=True)
+    client_name:Mapped[str]=mapped_column(String(255),nullable=False)
+    total_pings_sent:Mapped[str]=mapped_column(Integer,nullable=False)
+    created_by:Mapped[int]=mapped_column(Integer,ForeignKey("clients_table.client_id"),nullable=False)
+    created_at:Mapped[datetime]=mapped_column(DateTime(timezone=True),nullable=False,server_default=func.now())

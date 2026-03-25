@@ -11,6 +11,7 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from utils.logging.logger import define_logger
 from utils.auth.security import hash_password,verify_password,create_access_token,ACCESS_TOKEN_EXPIRE_MINUTES
 
+
 users_logger=define_logger("users_logger","logs/users_route.log")
 
 """
@@ -58,6 +59,7 @@ class ClientsCrudClass:
         
     # get single user on the system
     async def get_single_client_crud(self,client_id:int,session:AsyncSession):
+
         client_query=select(Clients_Table).where(Clients_Table.client_id==client_id)
         try:
             client_query_result=await session.execute(client_query)
@@ -66,7 +68,8 @@ class ClientsCrudClass:
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"client:{client_id} does not exist")
             if client.is_active is False:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail=f"client:{client_id} is not active, contact administrator for activation")
-            return ClientsSchema(client_id=client.client_id,client_email=client.email,created_at=client.created_at,is_active=client.is_active)
+            return ClientsSchema(client_id=client.client_id,client_email=client.email,client_name=client.client_name,created_at=client.created_at,is_active=client.is_active)
+        
         except HTTPException:
             raise
 

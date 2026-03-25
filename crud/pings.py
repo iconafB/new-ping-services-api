@@ -1,8 +1,10 @@
 from fastapi import HTTPException,status,UploadFile
-from sqlalchemy import select
+from sqlalchemy import select,func
+from math import ceil
+import polars as pl
 from sqlalchemy.ext.asyncio.session import AsyncSession
-from models.pings import PingsInput,pinged_input
-from schemas.pings import PingPayload,PingsCellNumber,PingsPayloadResponse,LoadPingPayloadResponse
+from models.pings import PingsInput,pinged_input,ClientPingsOverview
+from schemas.pings import PingPayload,PingsPayloadResponse,LoadPingPayloadResponse,PingOverview,PingsOverview
 from utils.logging.logger import define_logger
 from crud.credits import CreditsCrudClass
 from services.cell_number_validations.cell_number_validation import validate_sa_cell_numbers
@@ -19,8 +21,10 @@ class PingsCrudClass:
             credits_record=await credits_object.get_single_credits_record(user_id=user_id,session=session)
             credits=credits_record.credits_total
             pings_length=len(pings.cell_numbers)
+
             if credits==0:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail=f"insufficient credits balance:{credits} for user:{user_id} to process the requested pings payload")
+            
             # validate the cell numbers an clean the cell numbers
             validated_cell_numbers=validate_sa_cell_numbers(pings.cell_numbers)
             invalid_count=validated_cell_numbers["invalid_count"]
@@ -83,5 +87,21 @@ class PingsCrudClass:
         except Exception as e:
             pings_logger.exception(f"an internal server error occurred:{str(e)}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred")
-        
-
+    
+    async def get_pings_overview(self,page:int,page_size:int,user_id:int,session:AsyncSession):
+        base_query=select(ClientPingsOverview).where(ClientPingsOverview.created_by==user_id)
+        offset=(page-1)*page_size
+        count_query=select(func.count(ClientPingsOverview.pk))
+        base_query=base_query.order_by(ClientPingsOverview.created_at.desc()).offset(offset).limit(page_size)
+        try:
+            count_query_result=await session.execute(count_query)
+            count_result=count_query_result.scalar_one()
+            overview_result=await session.execute(base_query)
+            result=overview_result.scalars().all()
+            total_pages=ceil(count_result/page_size) if count_result > 0 else 1
+            return PingsOverview(total=total_pages,page=page,page_size=page_size,result=[PingOverview.model_validate(row) for row in result])
+        except HTTPException:
+            raise
+        except Exception as e:
+            pings_logger.exception(f"an internal server error while getting pings overview for user:{user_id} this is the exception:{str(e)}")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an")

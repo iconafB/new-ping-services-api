@@ -1,15 +1,17 @@
 from fastapi import APIRouter,Depends,status,Query
 from sqlalchemy.ext.asyncio import AsyncSession
+from typing import Annotated
 from datetime import date
 from crud.credits import CreditsCrudClass
 from schemas.credits import CreateCreditsResponse,CreateCredits,UserCreditsHistoryResponse,DeleteCreditsHistory
 from utils.auth.security import get_current_active_user_id
 from config.database import get_async_session
-from services.clients.clients import ClientService
-from services.branches.braches import BrachesService
-
+from services.documents_downloads.credits_statements import CreditsDocuments
+from crud.clients import ClientsCrudClass
 credits_router=APIRouter(tags=["CREDITS SERVICE"],prefix="/credits")
 credits_object=CreditsCrudClass()
+current_client=ClientsCrudClass
+download_services=CreditsDocuments(clients=current_client())
 
 #load credits
 @credits_router.post("/load",status_code=status.HTTP_201_CREATED,summary="Load credits",response_model=CreateCreditsResponse)
@@ -47,14 +49,30 @@ async def credits_deposits(user_id:int=Depends(get_current_active_user_id),sessi
     """
     return await credits_object.get_all_deposits(user_id=user_id,session=session,page=page,page_size=page_size)
 
-
-
 @credits_router.get("/download",status_code=status.HTTP_200_OK,summary="Download credits history",responses={200:{
     "description":"Download credits statements as PDF",
     "content":{"application/pdf":{}}
 }})
-async def download_credits_statements_pdf(user_id:int=Depends(get_current_active_user_id),state_date:date | None=Query(default=None,description="start date for credits statement"),end_date:date|None=Query(default=None,description="End date for credits statements"),session:AsyncSession=Depends(get_async_session)):
+async def download_credits_statements_pdf(user_id:int=Depends(get_current_active_user_id),start_date:date | None=Query(default=None,description="Filter statement from this date (inclusive). Format: YYYY-MM-DD",openapi_examples={ "month_start": {
+                    "summary": "Start of month",
+                    "value": "2026-03-01",
+                },"financial_year_start": {
+                    "summary": "Financial year start",
+                    "value": "2026-01-01",
+                },}),end_date:date|None=Query(default=None,description="End date for credits statements",openapi_examples={
+                     "month_end": {
+                    "summary": "End of month",
+                    "value": "2026-03-24",
+                },
+                "quarter_end": {
+                    "summary": "Quarter end",
+                    "value": "2026-03-31",
+                },
+                }),session:AsyncSession=Depends(get_async_session)):
     """
         Download statemenets of credits history in pdf format
     """
-    return "Download statement"
+
+    return await download_services.download_credits_pdf_statements(user_id=user_id,start_date=start_date,end_date=end_date,session=session)
+
+

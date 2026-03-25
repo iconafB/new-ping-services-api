@@ -144,3 +144,37 @@ pydantic_core._pydantic_core.ValidationError: 1 validation error for AllClientsS
 2026-03-24 08:28:19,832 - users_logger - INFO - user:user@gmail.com successfully logged in
 2026-03-24 08:53:32,425 - users_logger - INFO - user:9 with email:user@gmail.com logged in
 2026-03-24 08:53:32,425 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-24 10:25:41,919 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-24 10:25:41,920 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-24 10:36:04,494 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-24 10:36:04,495 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-24 11:02:03,320 - users_logger - ERROR - an internal server error while fetching user:1,1 validation error for ClientsSchema
+client_name
+  Field required [type=missing, input_value={'client_id': 1, 'client_...utc), 'is_active': True}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\clients.py", line 71, in get_single_client_crud
+    return ClientsSchema(client_id=client.client_id,client_email=client.email,created_at=client.created_at,is_active=client.is_active)
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 250, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 1 validation error for ClientsSchema
+client_name
+  Field required [type=missing, input_value={'client_id': 1, 'client_...utc), 'is_active': True}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+2026-03-24 11:07:19,153 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-24 11:07:19,153 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-24 11:23:49,709 - users_logger - INFO - new cleint:icon,with email:icon@gmail.com and client id:10 registered
+2026-03-24 11:24:37,176 - users_logger - INFO - user:10 with email:icon@gmail.com logged in
+2026-03-24 11:24:37,177 - users_logger - INFO - user:icon@gmail.com successfully logged in
+2026-03-24 11:43:08,966 - users_logger - INFO - user:10 with email:icon@gmail.com logged in
+2026-03-24 11:43:08,967 - users_logger - INFO - user:icon@gmail.com successfully logged in
+2026-03-24 12:17:05,216 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-24 12:17:05,217 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-24 14:16:33,188 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-24 14:16:33,190 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-24 14:53:50,728 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-24 14:53:50,729 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-25 08:13:19,119 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-25 08:13:19,120 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-25 09:20:18,958 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-25 09:20:18,959 - users_logger - INFO - user:user@gmail.com successfully logged in

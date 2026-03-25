@@ -24,6 +24,7 @@ class LoginUserResponse(BaseModel):
 class ClientsSchema(BaseModel):
     client_id:int
     client_email:str
+    client_name:str
     created_at:datetime
     is_active:bool
 
