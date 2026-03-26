@@ -6,8 +6,11 @@ from schemas.pings import PingPayload,PingsPayloadResponse,LoadPingPayloadRespon
 from utils.auth.security import get_current_active_user_id
 from utils.file_helpers.csv_validators import validate_csv_files
 pings_router=APIRouter(tags=["PINGS ROUTES"],prefix="/pings")
+#This need attebtion
+
 pings_crud=PingsCrudClass()
 #,response_model=PingsPayloadResponse
+
 @pings_router.post("",status_code=status.HTTP_201_CREATED,summary="Load pings as a json payload object",response_model=LoadPingPayloadResponse)
 async def load_pings_payload(pings:PingPayload,user_id=Depends(get_current_active_user_id),session:AsyncSession=Depends(get_async_session)):
     """
@@ -24,7 +27,7 @@ async def load_file_with_pings(file:UploadFile=File(...,description="Upload a cs
         load a file with cell numbers to be pinged,file type should be as follows
         (i) csv
     """
-    
+
     csv_file=await validate_csv_files(file=file)
     return await pings_crud.load_pings_using_a_file_upload_crud(file=csv_file,user_id=user_id,session=session)
 

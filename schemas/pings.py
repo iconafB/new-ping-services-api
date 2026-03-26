@@ -17,6 +17,9 @@ class LoadPingPayloadResponse(BaseModel):
     valid_numbers_count:int
     invalid_number_count:int
     remaining_credits:int
+    token:str
+
+
 
 class PingOverview(BaseModel):
     pk:int
@@ -29,3 +32,12 @@ class PingsOverview(BaseModel):
     page:int
     page_size:int
     result:List[PingOverview]
+
+
+#Note clients can give you same numbers to ping, don't give a damn even if those number have been submitted before process them
+
+class PingsBulkInsert(BaseModel):
+    total_pings_received:int
+    total_pings_process:int
+    duplicate_pings:int
+

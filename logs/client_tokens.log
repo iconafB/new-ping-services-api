@@ -1,0 +1,44 @@
+2026-03-26 13:55:54,179 - clients_logger - INFO - user:9 created token
+2026-03-26 13:55:54,204 - clients_logger - ERROR - an internal server error occurred while inserting token for user 9:1 validation error for TokenInsertionResponse
+pk
+  Field required [type=missing, input_value={'token_hash': '71ef509ae...=datetime.timezone.utc)}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\client_tokens.py", line 30, in insert_client_token
+    return TokenInsertionResponse(token_hash=client_token.token_hash,created_at=client_token.created_at)
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 250, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 1 validation error for TokenInsertionResponse
+pk
+  Field required [type=missing, input_value={'token_hash': '71ef509ae...=datetime.timezone.utc)}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+2026-03-26 13:58:40,814 - clients_logger - INFO - user:9 created token
+2026-03-26 13:58:40,815 - clients_logger - ERROR - an internal server error occurred while inserting token for user 9:1 validation error for TokenInsertionResponse
+pk
+  Field required [type=missing, input_value={'token_hash': '919dadf6a...=datetime.timezone.utc)}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\client_tokens.py", line 31, in insert_client_token
+    return TokenInsertionResponse(token_hash=client_token.token_hash,created_at=client_token.created_at)
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 250, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 1 validation error for TokenInsertionResponse
+pk
+  Field required [type=missing, input_value={'token_hash': '919dadf6a...=datetime.timezone.utc)}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+2026-03-26 14:00:43,287 - clients_logger - INFO - user:9 created token
+2026-03-26 14:01:20,391 - clients_logger - INFO - user:9 created token
+2026-03-26 14:01:20,392 - clients_logger - ERROR - an internal server error occurred while inserting token for user 9:'pings_retrieval_tokens' object has no attribute 'token'
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\client_tokens.py", line 30, in insert_client_token
+    print(client_token.token)
+          ^^^^^^^^^^^^^^^^^^
+AttributeError: 'pings_retrieval_tokens' object has no attribute 'token'
+2026-03-26 14:01:55,527 - clients_logger - INFO - user:9 created token
+2026-03-26 14:02:48,322 - clients_logger - INFO - user:9 created token
+2026-03-26 14:12:34,427 - clients_logger - INFO - user:9 created token
+2026-03-26 14:15:02,654 - clients_logger - INFO - user:9 created token
+2026-03-26 14:19:33,908 - clients_logger - INFO - user:9 created token
+2026-03-26 14:21:54,725 - clients_logger - INFO - user:9 created token
+2026-03-26 14:23:37,209 - clients_logger - INFO - user:9 created token
+2026-03-26 14:25:40,167 - clients_logger - INFO - user:9 created token

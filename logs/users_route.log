@@ -190,3 +190,9 @@ client_name
 2026-03-25 12:34:17,346 - users_logger - INFO - user:user@gmail.com successfully logged in
 2026-03-25 14:19:54,700 - users_logger - INFO - user:9 with email:user@gmail.com logged in
 2026-03-25 14:19:54,701 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-25 15:57:54,644 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-25 15:57:54,645 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-26 13:54:06,858 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-26 13:54:06,859 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-26 14:25:27,368 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-26 14:25:27,369 - users_logger - INFO - user:user@gmail.com successfully logged in

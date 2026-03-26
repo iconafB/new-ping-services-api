@@ -1,5 +1,4 @@
-from sqlalchemy import String,func,ForeignKey,Integer,text,Date,Text,DateTime
-
+from sqlalchemy import String,func,ForeignKey,Integer,text,Date,Text,DateTime,Boolean
 from sqlalchemy.orm import Mapped,mapped_column
 from datetime import datetime,date
 from config.database import Base
@@ -7,11 +6,14 @@ from config.database import Base
 
 class PingsInput(Base):
     __tablename__="pings_input"
-    ping_pk:Mapped[int]=mapped_column(primary_key=True,autoincrement=True)
-    cell_number:Mapped[str]=mapped_column(String(10),nullable=False,unique=True)
-    pinged_status:Mapped[str]=mapped_column(String(255),nullable=False)
-    created_date:Mapped[datetime]=mapped_column(server_default=func.now())
-    created_by:Mapped[int]=mapped_column(Integer,ForeignKey("clients_table.client_id"))
+    ping_pk:Mapped[int]=mapped_column(primary_key=True,autoincrement=True) # checked
+    cell_number:Mapped[str]=mapped_column(String(10),nullable=False,unique=True) # checked
+    created_by:Mapped[int]=mapped_column(Integer,ForeignKey("clients_table.client_id")) # checked
+    pinged_status:Mapped[str]=mapped_column(String(255),nullable=False) # checked
+    token_id:Mapped[int]=mapped_column(Integer,ForeignKey("pings_retrieval_tokens.pk"),nullable=False) # checked
+    is_pinged:Mapped[bool]=mapped_column(Boolean,nullable=False,default=False)
+    created_at:Mapped[datetime]=mapped_column(DateTime(timezone=True),nullable=False,server_default=func.now()) #checked
+    
 
 class pinged_input(Base):
     __tablename__="pinged_input"

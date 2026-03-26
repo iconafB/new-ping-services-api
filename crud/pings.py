@@ -5,21 +5,29 @@ import polars as pl
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from models.pings import pinged_input,ClientPingsOverview
 from schemas.pings import PingPayload,PingsPayloadResponse,LoadPingPayloadResponse,PingOverview,PingsOverview
+from schemas.pings_overview import PingsOverview,TotalPingsOverview
 from utils.logging.logger import define_logger
-from utils.auth.client_tokens import generate_secure_token,hash_token
 from crud.credits import CreditsCrudClass
+from crud.client_tokens import ClientTokenCrud
 from services.cell_number_validations.cell_number_validation import validate_sa_cell_numbers
 from services.pings.pings import bulk_insert_pings_input
 from services.files_services.csv_services import CSVClass
+
 pings_logger=define_logger("pings_logger","logs/pings_route.log")
+pings_overview_logger=define_logger("pings_overview_logger","logs/pings_overview.log")
+
 credits_object=CreditsCrudClass()
+
 class PingsCrudClass:
     #one credit per single ping
     #load pings payload
     def __init__(self):
         #this is tight coupling,needs to be resolved
         self.csv_service=CSVClass()
+        self.client_tokens=ClientTokenCrud()
+
     #charge them even for submitting wrong data, we don't clean for free
+    # create a token first
 
     async def load_pings_payload_crud(self,pings:PingPayload,user_id:int,session:AsyncSession)->PingsPayloadResponse:
         try:
@@ -37,14 +45,19 @@ class PingsCrudClass:
             # one ping per unit credit
             number_of_records=len(valid_numbers)
             updated_details=await credits_object.update_remaining_credits_balance(number_of_records=number_of_records,user_id=user_id,session=session)
-            # send the pings to the pings service to the dedago service
+            # generate and insert new token associated with a user
+            token=await self.client_tokens.insert_client_token(user_id=user_id,session=session)
+            # send the pings to the pings service and  to dedago service
             # input the pings into a table locally
-            pings_loaded_to_db=await bulk_insert_pings_input(session=session,cell_numbers=valid_numbers,user_id=user_id)
+            pings_loaded_to_db=await bulk_insert_pings_input(session=session,cell_numbers=valid_numbers,user_id=user_id,token_id=token.pk)
+            #capture the total number of pings added
+            print("print the returned token")
+            print(pings_loaded_to_db)
             # commit these numbers to a database table
             pings_logger.info(f"valid count cell numbers:{valid_count}, and invalid count:{invalid_count}")
-            return LoadPingPayloadResponse(valid_numbers_count=valid_count,invalid_number_count=invalid_count,remaining_credits=updated_details.remaining_credits)
-        
 
+            return LoadPingPayloadResponse(valid_numbers_count=valid_count,invalid_number_count=invalid_count,remaining_credits=updated_details.remaining_credits,token=token.token)
+        
         except HTTPException:
             raise
 
@@ -58,17 +71,29 @@ class PingsCrudClass:
             cell_numbers_length=len(clean_cell_numbers)
             user_credits_record=await credits_object.get_single_credits_record(user_id=user_id,session=session)
             credits=user_credits_record.credits_total
+            #search if credits are enough 
             if credits==0:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail=f"insufficient credits balance:{credits} for user:{user_id} to process the requested pings payload")
+            #create token and insert it on the pings table
+            token=await self.client_tokens.insert_client_token(user_id=user_id,session=session)
             #keep a record of pings
-            pings_loaded_to_db=await bulk_insert_pings_input(session=session,cell_numbers=clean_cell_numbers,user_id=user_id)
+            pings_loaded_to_db=await bulk_insert_pings_input(session=session,cell_numbers=clean_cell_numbers,user_id=user_id,token_id=token.pk)
+
             #There must be functionality for sending payload to another service
-            total_numbers_received=pings_loaded_to_db['total_received']
+            total_numbers_received=pings_loaded_to_db.total_pings_received
+            total_pings_processed=pings_loaded_to_db.total_pings_processed
+            duplicate_pings=pings_loaded_to_db.duplicate_pings
+            print(f"print the total number of pings received:{total_numbers_received}")
+            print(f"duplicate pings:{duplicate_pings}")
+            print(f"total pings processed:{total_pings_processed}")
             credits_details_response=await credits_object.update_remaining_credits_balance(number_of_records=cell_numbers_length,user_id=user_id,session=session)
-            return LoadPingPayloadResponse(valid_numbers_count=total_numbers_received,invalid_number_count=10,remaining_credits=credits_details_response.remaining_credits)
+            #the user should get the token to fetch the pings
+            return LoadPingPayloadResponse(valid_numbers_count=total_numbers_received,invalid_number_count=10,remaining_credits=credits_details_response.remaining_credits,token=token.token)
+        
         
         except HTTPException:
             raise
+
         except Exception as e:
             pings_logger.exception(f"an internal server error occurred while uploading a pings file:{str(e)}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred while loading a pings file")
@@ -124,3 +149,42 @@ class PingsCrudClass:
         except Exception as e:
             pings_logger.exception(f"an internal server error while getting pings overview for user:{user_id} this is the exception:{str(e)}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an")
+        
+
+class PingsOverviewClass:
+
+    def __init__(self):
+        pass
+
+    async def insert_total_pings_overview(self,session:AsyncSession,user_id:int,total_pings:int):
+        total_overview_insert=ClientPingsOverview(created_by=user_id,total_pings=total_pings)
+        session.add(total_overview_insert)
+        try:
+            await session.commit()
+            await session.refresh(total_overview_insert)
+            return PingsOverview(pk=total_overview_insert.pk,total_pings=total_overview_insert.total_pings_sent,created_by=total_overview_insert.created_by)
+        except HTTPException:
+            raise
+        except Exception as e:
+            pings_overview_logger.exception(f"an internal server error occurred while inserting total pings for user:{user_id},{str(e)}")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while capturing the total number of records")
+
+    async def get_all_pings_overview(self,session:AsyncSession,page:int,page_size:int,user_id:int):
+        offset=(page-1)*page_size
+        total_count_query=select(func.count(ClientPingsOverview.pk)).where(ClientPingsOverview.created_by==user_id)
+        pings_query=select(ClientPingsOverview).where(ClientPingsOverview.created_by).order_by(ClientPingsOverview.created_by.desc()).offset(offset).limit(page_size)
+        try:
+            total_pings=await session.execute(total_count_query)
+            total_pings_result=total_pings.scalar_one()
+            total=await session.execute(pings_query)
+            results=total.scalars().all()
+            return TotalPingsOverview(total=total_pings_result,page=page,page_size=page_size,results=[PingsOverview(row) for row in results])
+        
+        except HTTPException:
+            raise
+        except Exception as e:
+            pings_overview_logger.exception(f"an internal server error occurred while fetching pings overview:{str(e)}")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred while fetching all ping overview")
+        
+
+

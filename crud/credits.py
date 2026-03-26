@@ -10,6 +10,7 @@ Implement  a class that performs crud for the credits entity of the system
 """
 
 credits_logger=define_logger("credits_logger","logs/credits_route.log")
+
 class CreditsCrudClass:
     # load/create credits on the service
     async def load_client_credits(self,credits_amount:int,user_id:int,session:AsyncSession)->CreateCreditsResponse:
@@ -50,19 +51,22 @@ class CreditsCrudClass:
     
     # get all credits, credits history, this history should be paginated
     async def get_all_credits_history_for_a_user(self,page:int,page_size:int,user_id:int,session:AsyncSession)->UserCreditsHistoryResponse:
+        offset=(page - 1)*page_size
+        base_query=select(Credits_History_Table)
+        count_query=select(func.count(Credits_History_Table.history_id)).where(Credits_History_Table.created_by==user_id)
+        base_query=(base_query.order_by(Credits_History_Table.created_at.desc()).where(Credits_History_Table.created_by==user_id).offset(offset).limit(page_size))
+
         try:
-            offset=(page - 1)*page_size
-            base_query=select(Credits_History_Table)
-            count_query=select(func.count(Credits_History_Table.history_id)).where(Credits_History_Table.created_by==user_id)
-            base_query=(base_query.order_by(Credits_History_Table.created_at.desc()).where(Credits_History_Table.created_by==user_id).offset(offset).limit(page_size))
             total_records_result=await session.execute(count_query)
             total_records=total_records_result.scalar_one()
             history_result=await session.execute(base_query)
             history_records=history_result.scalars().all()
             total_pages=ceil(total_records / page_size) if total_records > 0 else 1
             return UserCreditsHistoryResponse(page=page,page_size=page_size,total_records=total_records,total_pages=total_pages,credits_history=[UserCreditsHistoryItem.model_validate(record) for record in history_records])
+        
         except HTTPException:
             raise
+        
 
         except Exception as e:
             credits_logger.exception(f"an internal server error occurred while using getting credit history:{str(e)}")
@@ -131,6 +135,7 @@ class CreditsCrudClass:
         #check if the number of record is valid,only positive values
         if number_of_records<0:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail=f"Invalid update value:{number_of_records},value must be greated than zero")
+        
         try:
             credits_record=await session.execute(record_query)
             credits_result=credits_record.scalar_one_or_none()
@@ -138,6 +143,7 @@ class CreditsCrudClass:
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"No credits record balance exist for user:{user_id}")
             current_credits=credits_result.credits_balance or 0
             # Subtraction higher than available balance
+
             if number_of_records > current_credits:
                 new_balance=0
                 credits_result.credits_balance=new_balance
@@ -163,7 +169,6 @@ class CreditsCrudClass:
         except Exception as e:
             credits_logger.exception(f"an exception occurred while updating the remaining credits balance by user:{user_id}, exception:{str(e)}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while updating the credits balance for user:{user_id}")
-
      
     async def update_withdrawals_credits_history(self,user_id:int,withdrawn_amount:int,session:AsyncSession):
         try:
@@ -201,6 +206,7 @@ class CreditsCrudClass:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occured while fetching all the deposits for user:{user_id}") 
 
     async def get_all_withdrawals(self,user_id:int,session:AsyncSession,page:int,page_size:int):
+
         offset=(page-1)*page_size
         deposit_query=select(Credits_History_Table).where(Credits_History_Table.created_by==user_id).where(Credits_History_Table.transaction_type==TransactionType.Withdrawal).order_by(Credits_History_Table.created_at.desc()).offset(offset).limit(page_size)
         count_query=select(func.count(Credits_History_Table.history_id)).where(Credits_History_Table.created_by==user_id)
@@ -209,7 +215,9 @@ class CreditsCrudClass:
             total=count_query_result.scalar_one()
             deposit_results=await session.execute(deposit_query)
             results=deposit_results.scalars().all()
+            #this is nonsense
             total_pages=ceil(total / page_size) if total > 0 else 1
+
             return UserCreditsHistoryResponse(page=page,page_size=page_size,total_records=total,total_pages=total_pages,credits_history=[UserCreditsHistoryItem.model_validate(record) for record in results])
         except HTTPException:
             raise
@@ -217,4 +225,3 @@ class CreditsCrudClass:
             credits_logger.exception(f"an internal server error occurred while fetching all the deposits for user:{user_id},{str(e)}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occured while fetching all the deposits for user:{user_id}")   
 
-      

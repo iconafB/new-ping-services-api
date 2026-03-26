@@ -1,5 +1,7 @@
 from fastapi import HTTPException,status,BackgroundTasks
 from sqlalchemy.ext.asyncio.session import AsyncSession
+import httpx
+from dto.pings import PingsBulkInsertResult
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from models.pings import PingsInput
 from utils.logging.logger import define_logger
@@ -12,8 +14,10 @@ def chunked(values: list[str], size: int):
     for i in range(0, len(values), size):
         yield values[i:i + size]
 
+#for this bulk insert, we need to load a token
 
-async def bulk_insert_pings_input(session: AsyncSession,cell_numbers: list[str],user_id: int,pinged_status: str = "Pending",chunk_size: int = 1000) -> dict:
+async def bulk_insert_pings_input(session: AsyncSession,cell_numbers: list[str],user_id: int,token_id:int,pinged_status: str = "Pending",chunk_size: int = 1000) -> dict:
+    
     inserted_count = 0
     try:
         for batch in chunked(cell_numbers, chunk_size):
@@ -22,6 +26,7 @@ async def bulk_insert_pings_input(session: AsyncSession,cell_numbers: list[str],
                     "cell_number": cell_number,
                     "pinged_status": pinged_status,
                     "created_by": user_id,
+                    "token_id":token_id
                 }
                 for cell_number in batch
                 ]
@@ -31,13 +36,10 @@ async def bulk_insert_pings_input(session: AsyncSession,cell_numbers: list[str],
             inserted_count += len(result.scalars().all())
         await session.commit()
         cell_numbers_length=len(cell_numbers)
+
         pings_logger.info(f"user:{user_id} loaded pings records equal to:{cell_numbers_length}")
-        
-        return {
-            "total_received": cell_numbers_length,
-            "inserted_into_db": inserted_count,
-            "already_existing_in_db": len(cell_numbers) - inserted_count,
-        }
+
+        return  PingsBulkInsertResult(total_pings_received=cell_numbers_length,total_pings_processed=inserted_count,duplicate_pings=len(cell_numbers) - inserted_count) 
     
     except Exception as e:
         await session.rollback()
