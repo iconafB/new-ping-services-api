@@ -196,3 +196,11 @@ client_name
 2026-03-26 13:54:06,859 - users_logger - INFO - user:user@gmail.com successfully logged in
 2026-03-26 14:25:27,368 - users_logger - INFO - user:9 with email:user@gmail.com logged in
 2026-03-26 14:25:27,369 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-26 15:02:26,083 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-26 15:02:26,084 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-26 15:11:54,505 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-26 15:11:54,505 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-26 15:42:27,680 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-26 15:42:27,681 - users_logger - INFO - user:user@gmail.com successfully logged in
+2026-03-26 16:15:51,218 - users_logger - INFO - user:9 with email:user@gmail.com logged in
+2026-03-26 16:15:51,219 - users_logger - INFO - user:user@gmail.com successfully logged in

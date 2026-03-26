@@ -41,3 +41,12 @@ class PingsBulkInsert(BaseModel):
     total_pings_process:int
     duplicate_pings:int
 
+
+class PingStatusResponse(BaseModel):
+    token:str
+    message:str
+
+
+class AllPingsPayload(BaseModel):
+    message:str
+    cell_numbers:list[str]

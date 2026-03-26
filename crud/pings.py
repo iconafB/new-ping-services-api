@@ -1,10 +1,11 @@
 from fastapi import HTTPException,status,UploadFile
-from sqlalchemy import select,func
+from sqlalchemy import select,func,update
 from math import ceil
 import polars as pl
 from sqlalchemy.ext.asyncio.session import AsyncSession
-from models.pings import pinged_input,ClientPingsOverview
-from schemas.pings import PingPayload,PingsPayloadResponse,LoadPingPayloadResponse,PingOverview,PingsOverview
+from models.pings import pinged_input,ClientPingsOverview,PingsInput
+from models.client_tokens import pings_retrieval_tokens
+from schemas.pings import PingPayload,PingsPayloadResponse,LoadPingPayloadResponse,PingOverview,PingsOverview,PingStatusResponse
 from schemas.pings_overview import PingsOverview,TotalPingsOverview
 from utils.logging.logger import define_logger
 from crud.credits import CreditsCrudClass
@@ -29,7 +30,9 @@ class PingsCrudClass:
     #charge them even for submitting wrong data, we don't clean for free
     # create a token first
 
+
     async def load_pings_payload_crud(self,pings:PingPayload,user_id:int,session:AsyncSession)->PingsPayloadResponse:
+
         try:
             # before loading pings, check if the credits balance matches
             credits_record=await credits_object.get_single_credits_record(user_id=user_id,session=session)
@@ -55,7 +58,6 @@ class PingsCrudClass:
             print(pings_loaded_to_db)
             # commit these numbers to a database table
             pings_logger.info(f"valid count cell numbers:{valid_count}, and invalid count:{invalid_count}")
-
             return LoadPingPayloadResponse(valid_numbers_count=valid_count,invalid_number_count=invalid_count,remaining_credits=updated_details.remaining_credits,token=token.token)
         
         except HTTPException:
@@ -101,17 +103,59 @@ class PingsCrudClass:
         finally:
             await file.close()
     
-
-    async def check_pings_status(self,pings_id:str,user_id:int,session:AsyncSession):
-       
+    #this method can be made 
+    async def check_pings_status(self,token:str,user_id:int,session:AsyncSession):
+        #validate the existance of the token
+        token_query=select(pings_retrieval_tokens.token_hash,pings_retrieval_tokens.pk).where(pings_retrieval_tokens.token_hash==token).where(pings_retrieval_tokens.client_id==user_id)
         try:
-           return
+           token_query_result=await session.execute(token_query)
+           token_result=token_query_result.one_or_none()
+           if token_result is None:
+               raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail=f"Invalid token provided")
+           
+           pings_query=select(PingsInput.pinged_status,PingsInput.is_pinged).where(PingsInput.token_id==token_result.pk)
+           pings_result=await session.execute(pings_query)
+           result=pings_result.first()
+           # Grammar chief, Grammar!!!!!
+           if result.pinged_status=="Pending":
+               return PingStatusResponse(token=token,message=f"pings are not ready to be downloaded")
+           # Think about returning everything if the pings are ready
+           return PingStatusResponse(token=token,message=f"Pings are ready to be downloaded")
+        
         except HTTPException:
             raise
+
         except Exception as e:
             pings_logger.exception(f"an internal server error occurred while checking the pings status:{str(e)}")
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred while checking pings status for pings_id:{pings_id} with user id:{user_id}")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred while checking token:{token} with user id:{user_id}")
+        
 
+    async def get_all_pings_ready_for_download(self,token:str,session:AsyncSession,user_id:int):
+        #search for the token
+        token_query=select(pings_retrieval_tokens.token_hash,pings_retrieval_tokens.pk).where(pings_retrieval_tokens.token_hash==token).where(pings_retrieval_tokens.client_id==user_id).where(pings_retrieval_tokens.is_active==False)
+        try:
+            token_query_result=await session.execute(token_query)
+            token=token_query_result.one_or_none()
+            #verify token existence and legitimacey, spelling chief!!!!
+            if token is None:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"Invalid token provided")
+            pings_status_query=select(PingsInput.pinged_status,PingsInput.is_pinged).where(PingsInput.token_id==token.pk)
+            pings_result=await session.execute(pings_status_query)
+            result=pings_result.first()
+            #pings are not ready
+            if result.pinged_status=='Pending':
+
+                return
+            #fetch the pinged cell number, update the pinged_status and invalidate the token submitted
+            # on the tokens table update,the is_used column,used_at column,is_active
+
+            return True
+        except HTTPException:
+            raise
+
+        except Exception as e:
+            pings_logger.exception(f"an internal server error occurred while fetching pings {str(e)}")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while fetching pings")
 
     async def fetch_pings_crud(self,pings_id:str,user_id:int,session:AsyncSession):
         try:
@@ -133,22 +177,27 @@ class PingsCrudClass:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred")
     
     async def get_pings_overview(self,page:int,page_size:int,user_id:int,session:AsyncSession):
+
         base_query=select(ClientPingsOverview).where(ClientPingsOverview.created_by==user_id)
         offset=(page-1)*page_size
+        print(f"print offset:{offset}")
         count_query=select(func.count(ClientPingsOverview.pk))
         base_query=base_query.order_by(ClientPingsOverview.created_at.desc()).offset(offset).limit(page_size)
         try:
             count_query_result=await session.execute(count_query)
             count_result=count_query_result.scalar_one()
+            print(f"total pings overview:{count_result}")
             overview_result=await session.execute(base_query)
             result=overview_result.scalars().all()
-            total_pages=ceil(count_result/page_size) if count_result > 0 else 1
-            return PingsOverview(total=total_pages,page=page,page_size=page_size,result=[PingOverview.model_validate(row) for row in result])
+            print("print the total")
+            print(result)
+            #total_pages=ceil(count_result/page_size) if count_result > 0 else 1
+            return PingsOverview(total=count_result,page=page,page_size=page_size,result=[PingOverview.model_validate(row) for row in result])
         except HTTPException:
             raise
         except Exception as e:
             pings_logger.exception(f"an internal server error while getting pings overview for user:{user_id} this is the exception:{str(e)}")
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while  fetching pings overview")
         
 
 class PingsOverviewClass:
@@ -163,6 +212,7 @@ class PingsOverviewClass:
             await session.commit()
             await session.refresh(total_overview_insert)
             return PingsOverview(pk=total_overview_insert.pk,total_pings=total_overview_insert.total_pings_sent,created_by=total_overview_insert.created_by)
+        
         except HTTPException:
             raise
         except Exception as e:
@@ -170,6 +220,7 @@ class PingsOverviewClass:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while capturing the total number of records")
 
     async def get_all_pings_overview(self,session:AsyncSession,page:int,page_size:int,user_id:int):
+
         offset=(page-1)*page_size
         total_count_query=select(func.count(ClientPingsOverview.pk)).where(ClientPingsOverview.created_by==user_id)
         pings_query=select(ClientPingsOverview).where(ClientPingsOverview.created_by).order_by(ClientPingsOverview.created_by.desc()).offset(offset).limit(page_size)
@@ -185,6 +236,4 @@ class PingsOverviewClass:
         except Exception as e:
             pings_overview_logger.exception(f"an internal server error occurred while fetching pings overview:{str(e)}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred while fetching all ping overview")
-        
-
 

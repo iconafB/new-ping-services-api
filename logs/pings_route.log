@@ -3291,3 +3291,189 @@ AttributeError: 'TokenInsertionResponse' object has no attribute 'token_hash'
 2026-03-26 14:23:37,406 - pings_logger - INFO - user:9 loaded pings records equal to:1000
 2026-03-26 14:25:40,171 - pings_logger - INFO - user:9 loaded pings records equal to:1
 2026-03-26 14:25:40,172 - pings_logger - INFO - valid count cell numbers:1, and invalid count:0
+2026-03-26 15:02:29,653 - pings_logger - INFO - user:9 loaded pings records equal to:500
+2026-03-26 15:12:18,197 - pings_logger - ERROR - an internal server error while getting pings overview for user:9 this is the exception:3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 156, in get_pings_overview
+    return PingsOverview(total=total_pages,page=page,page_size=page_size,result=[PingOverview.model_validate(row) for row in result])
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 250, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+2026-03-26 15:12:25,195 - pings_logger - ERROR - an internal server error while getting pings overview for user:9 this is the exception:3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 156, in get_pings_overview
+    return PingsOverview(total=total_pages,page=page,page_size=page_size,result=[PingOverview.model_validate(row) for row in result])
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 250, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+2026-03-26 15:26:04,044 - pings_logger - ERROR - an internal server error while getting pings overview for user:9 this is the exception:3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 157, in get_pings_overview
+    return PingsOverview(total=total_pages,page=page,page_size=page_size,result=[PingOverview.model_validate(row) for row in result])
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 250, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+2026-03-26 15:27:11,068 - pings_logger - ERROR - an internal server error while getting pings overview for user:9 this is the exception:3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 158, in get_pings_overview
+    return PingsOverview(total=total_pages,page=page,page_size=page_size,result=[PingOverview.model_validate(row) for row in result])
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 250, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+2026-03-26 15:27:59,429 - pings_logger - ERROR - an internal server error while getting pings overview for user:9 this is the exception:3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 160, in get_pings_overview
+    return PingsOverview(total=total_pages,page=page,page_size=page_size,result=[PingOverview.model_validate(row) for row in result])
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 250, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+2026-03-26 15:28:23,324 - pings_logger - ERROR - an internal server error while getting pings overview for user:9 this is the exception:3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 160, in get_pings_overview
+    return PingsOverview(total=total_pages,page=page,page_size=page_size,result=[PingOverview.model_validate(row) for row in result])
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 250, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+2026-03-26 15:37:08,169 - pings_logger - INFO - user:9 loaded pings records equal to:500
+2026-03-26 15:49:20,455 - pings_logger - INFO - user:9 loaded pings records equal to:1
+2026-03-26 15:49:20,457 - pings_logger - INFO - valid count cell numbers:1, and invalid count:0
+2026-03-26 15:57:45,734 - pings_logger - ERROR - an internal server error occurred while checking the pings status:Multiple rows were found when one or none was required
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 119, in check_pings_status
+    result=pings_result.one_or_none()
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\result.py", line 1458, in one_or_none
+    return self._only_one_row(
+           ~~~~~~~~~~~~~~~~~~^
+        raise_for_second_row=True, raise_for_none=False, scalar=False
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\result.py", line 825, in _only_one_row
+    raise exc.MultipleResultsFound(
+    ...<4 lines>...
+    )
+sqlalchemy.exc.MultipleResultsFound: Multiple rows were found when one or none was required
+2026-03-26 15:58:30,651 - pings_logger - ERROR - an internal server error occurred while checking the pings status:Multiple rows were found when one or none was required
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 119, in check_pings_status
+    result=pings_result.scalar_one_or_none()
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\result.py", line 1504, in scalar_one_or_none
+    return self._only_one_row(
+           ~~~~~~~~~~~~~~~~~~^
+        raise_for_second_row=True, raise_for_none=False, scalar=True
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\result.py", line 825, in _only_one_row
+    raise exc.MultipleResultsFound(
+    ...<4 lines>...
+    )
+sqlalchemy.exc.MultipleResultsFound: Multiple rows were found when one or none was required
