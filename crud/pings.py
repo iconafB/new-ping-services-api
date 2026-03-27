@@ -228,11 +228,11 @@ class PingsOverviewClass:
             await session.refresh(total_overview_insert)
             pings_overview_logger.info(f"a total of {total_overview_insert.total_pings_sent} inserted by client:{total_overview_insert.client_name}")
             return PingsOverviewInsertionResult(pk=total_overview_insert.pk,total_pings=total_overview_insert.total_pings_sent,created_by=total_overview_insert.created_by)
-        
         except HTTPException:
             raise
 
         except Exception as e:
+            await session.rollback()
             pings_overview_logger.exception(f"an internal server error occurred while inserting total pings for user:{client.client_id},{str(e)}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while capturing the total number of records")
 
