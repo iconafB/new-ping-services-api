@@ -3,3 +3,5 @@
 2026-03-27 10:21:56,999 - pings_overview_logger - INFO - a total of 4 inserted by client:sunday_test
 2026-03-27 11:26:54,004 - pings_overview_logger - INFO - a total of 500 inserted by client:sunday_test
 2026-03-27 11:33:10,426 - pings_overview_logger - INFO - a total of 5000 inserted by client:sunday_test
+2026-03-27 11:39:24,899 - pings_overview_logger - INFO - a total of 15000 inserted by client:sunday_test
+2026-03-27 11:44:29,761 - pings_overview_logger - INFO - a total of 99982 inserted by client:sunday_test

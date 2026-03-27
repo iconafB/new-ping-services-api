@@ -11,3 +11,10 @@
 2026-03-25 14:21:27,680 - statements_logger - INFO - client:sunday_test with email:user@gmail.com downloaded transaction history document
 2026-03-26 14:31:57,831 - statements_logger - INFO - client:sunday_test with email:user@gmail.com downloaded transaction history document
 2026-03-26 15:30:10,637 - statements_logger - INFO - client:sunday_test with email:user@gmail.com downloaded transaction history document
+2026-03-27 15:44:28,686 - statements_logger - ERROR - an internal server error occurred while downloading credits statements for user:9
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\services\documents_downloads\credits_statements.py", line 90, in download_credits_pdf_statements
+    opening_stmt=select(Credits_History_Table.credits_amount,Credits_History_Table.transaction_type).where(Credits_History_Table.created_by==user_id)
+                                                                                                                                             ^^^^^^^
+NameError: name 'user_id' is not defined
+2026-03-27 15:45:36,650 - statements_logger - INFO - client:sunday_test with email:user@gmail.com downloaded transaction history document

@@ -4,6 +4,7 @@ from sqlalchemy import select,func,update
 from math import ceil
 from utils.logging.logger import define_logger
 from models.credits import Credits,Credits_History_Table,TransactionType
+from schemas.clients import CurrentClientSchema
 from schemas.credits import CreateCreditsResponse,UserCreditsHistoryResponse,UserCreditsHistoryItem,DeleteCreditsHistory,UpdateCreditsRemainingCredits
 """
 Implement  a class that performs crud for the credits entity of the system
@@ -63,35 +64,34 @@ class CreditsCrudClass:
             history_records=history_result.scalars().all()
             total_pages=ceil(total_records / page_size) if total_records > 0 else 1
             return UserCreditsHistoryResponse(page=page,page_size=page_size,total_records=total_records,total_pages=total_pages,credits_history=[UserCreditsHistoryItem.model_validate(record) for record in history_records])
-        
         except HTTPException:
             raise
         
 
-        except Exception as e:
-            credits_logger.exception(f"an internal server error occurred while using getting credit history:{str(e)}")
+        except Exception:
+            credits_logger.exception(f"an internal server error occurred while using getting credit history")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while fetching credits history for user:{user_id}")
     
     # get single credits record
-    async def get_single_credits_record(self,client_id:int,session:AsyncSession)->CreateCreditsResponse:
+    async def get_single_credits_record(self,client:CurrentClientSchema,session:AsyncSession)->CreateCreditsResponse:
 
-        credits_stmt=select(Credits).where(Credits.created_by==client_id)
+        credits_stmt=select(Credits).where(Credits.created_by==client.client_id)
         try:
             credits=await session.execute(credits_stmt)
             results=credits.scalar_one_or_none()
             if results.is_active==False:
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail=f"No active credit balance for user:{client_id}")
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail=f"No active credit balance for user:{client.client_id}")
             if results is None:
-                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"user:{client_id} has no credits history")
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"user:{client.client_id} has no credits history")
             return CreateCreditsResponse(credits_id=results.credits_id,credits_total=results.credits_balance,created_by=results.created_by)
         
         except HTTPException:
             raise
 
         except Exception as e:
-            credits_logger.exception(f"an internal server error occurred while get credits records:{client_id},{str(e)}")
+            credits_logger.exception(f"an internal server error occurred while get credits records:{client.client_id},{str(e)}")
 
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred while fetching credits record for user:{client_id}")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred while fetching credits record for user:{client.client_id}")
     
     # remove credits history,soft delete
     async def delete_credits_history_db(self,client_id:int,session:AsyncSession):
@@ -190,10 +190,10 @@ class CreditsCrudClass:
             credits_logger.exception(f"an internal server error occurred while depositing into")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server")
 
-    async def get_all_deposits(self,client_id:int,session:AsyncSession,page:int,page_size:int):
+    async def get_all_deposits(self,client:CurrentClientSchema,session:AsyncSession,page:int,page_size:int):
         offset=(page-1)*page_size
-        deposit_query=select(Credits_History_Table).where(Credits_History_Table.created_by==client_id).where(Credits_History_Table.transaction_type==TransactionType.Deposit).order_by(Credits_History_Table.created_at.desc()).offset(offset).limit(page_size)
-        count_query=select(func.count(Credits_History_Table.history_id)).where(Credits_History_Table.created_by==client_id)
+        deposit_query=select(Credits_History_Table).where(Credits_History_Table.created_by==client.client_id).where(Credits_History_Table.transaction_type==TransactionType.Deposit).order_by(Credits_History_Table.created_at.desc()).offset(offset).limit(page_size)
+        count_query=select(func.count(Credits_History_Table.history_id)).where(Credits_History_Table.created_by==client.client_id)
         try:
             count_query_result=await session.execute(count_query)
             total=count_query_result.scalar_one()
@@ -203,15 +203,15 @@ class CreditsCrudClass:
             return UserCreditsHistoryResponse(page=page,page_size=page_size,total_records=total,total_pages=total_pages,credits_history=[UserCreditsHistoryItem.model_validate(record) for record in results])
         except HTTPException:
             raise
-        except Exception as e:
-            credits_logger.exception(f"an internal server error occurred while fetching all the deposits for user:{client_id},{str(e)}")
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occured while fetching all the deposits for user:{client_id}") 
+        except Exception:
+            credits_logger.exception(f"an internal server error occurred while fetching all the deposits for user:{client.client_id}")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occured while fetching all the deposits for user:{client.client_id}") 
 
-    async def get_all_withdrawals(self,client_id:int,session:AsyncSession,page:int,page_size:int):
+    async def get_all_withdrawals(self,client:CurrentClientSchema,session:AsyncSession,page:int,page_size:int):
 
         offset=(page-1)*page_size
-        deposit_query=select(Credits_History_Table).where(Credits_History_Table.created_by==client_id).where(Credits_History_Table.transaction_type==TransactionType.Withdrawal).order_by(Credits_History_Table.created_at.desc()).offset(offset).limit(page_size)
-        count_query=select(func.count(Credits_History_Table.history_id)).where(Credits_History_Table.created_by==client_id)
+        deposit_query=select(Credits_History_Table).where(Credits_History_Table.created_by==client.client_id).where(Credits_History_Table.transaction_type==TransactionType.Withdrawal).order_by(Credits_History_Table.created_at.desc()).offset(offset).limit(page_size)
+        count_query=select(func.count(Credits_History_Table.history_id)).where(Credits_History_Table.created_by==client.client_id)
         try:
             count_query_result=await session.execute(count_query)
             total=count_query_result.scalar_one()
@@ -223,7 +223,7 @@ class CreditsCrudClass:
             return UserCreditsHistoryResponse(page=page,page_size=page_size,total_records=total,total_pages=total_pages,credits_history=[UserCreditsHistoryItem.model_validate(record) for record in results])
         except HTTPException:
             raise
-        except Exception as e:
-            credits_logger.exception(f"an internal server error occurred while fetching all the deposits for user:{client_id},{str(e)}")
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occured while fetching all the deposits for user:{client_id}")   
+        except Exception:
+            credits_logger.exception(f"an internal server error occurred while fetching all the deposits for user:{client.client_id}")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occured while fetching all the deposits for user:{client.client_id}")   
 

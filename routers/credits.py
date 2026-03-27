@@ -8,7 +8,6 @@ from schemas.clients import CurrentClientSchema
 from utils.auth.security import get_current_active_user
 from config.database import get_async_session
 from services.documents_downloads.credits_statements import CreditsDocuments
-
 from crud.clients import ClientsCrudClass
 credits_router=APIRouter(tags=["CREDITS SERVICE"],prefix="/v1/credits")
 credits_object=CreditsCrudClass()
@@ -32,7 +31,8 @@ async def get_user_credits_history(page:int=Query(1,ge=1,description="page numbe
 #get single history record
 @credits_router.get("/record",status_code=status.HTTP_200_OK,description="Get Single record of credits",response_model=CreateCreditsResponse)
 async def get_single_credits_record(client:CurrentClientSchema=Depends(get_current_active_user),session:AsyncSession=Depends(get_async_session)):
-    return await credits_object.get_single_credits_record(user_id=client.client_id,session=session)
+
+    return await credits_object.get_single_credits_record(client=client,session=session)
 
 @credits_router.patch("/delete",status_code=status.HTTP_200_OK,description="Delete credit history of the current user",response_model= DeleteCreditsHistory)
 async def delete_credits_history_for_current_user(client:CurrentClientSchema=Depends(get_current_active_user),session:AsyncSession=Depends(get_async_session)):
@@ -43,14 +43,14 @@ async def withdrawals(client:CurrentClientSchema=Depends(get_current_active_user
     """
         Get all the credits withdrawals transactions for a client
     """
-    return await credits_object.get_all_withdrawals(client_id=client.client_id,session=session,page=page,page_size=page_size)
+    return await credits_object.get_all_withdrawals(client=client,session=session,page=page,page_size=page_size)
 
 @credits_router.get("/deposits",status_code=status.HTTP_200_OK,summary="Get all the depoists",response_model=UserCreditsHistoryResponse)
 async def credits_deposits(client:CurrentClientSchema=Depends(get_current_active_user),session:AsyncSession=Depends(get_async_session),page:int=Query(1,ge=1,description="Page Number"),page_size:int=Query(10,le=100,description="Number of items per unit page")):
     """
         Get all the credits deposit transactions for a client
     """
-    return await credits_object.get_all_deposits(client_id=client.client_id,session=session,page=page,page_size=page_size)
+    return await credits_object.get_all_deposits(client=client,session=session,page=page,page_size=page_size)
 
 
 @credits_router.get("/download",status_code=status.HTTP_200_OK,summary="Download credits history",responses={200:{
@@ -73,13 +73,10 @@ async def download_credits_statements_pdf(client:CurrentClientSchema=Depends(get
                     "value": "2026-03-31",
                 },
                 }),session:AsyncSession=Depends(get_async_session)):
+    
     """
         Download statemenets of credits history in pdf format
     """
 
-    return await download_services.download_credits_pdf_statements(client_id=client.client_id,start_date=start_date,end_date=end_date,session=session)
-
-
-
-
+    return await download_services.download_credits_pdf_statements(client=client,start_date=start_date,end_date=end_date,session=session)
 

@@ -15,6 +15,7 @@ from reportlab.pdfgen import canvas
 from crud.clients import ClientsCrudClass
 from utils.logging.logger import define_logger
 from models.credits import Credits_History_Table
+from schemas.clients import CurrentClientSchema
 
 statements_logger=define_logger("statements_logger","logs/statements_route.log")
 
@@ -64,6 +65,7 @@ def pdf_header_footer(canvas, doc):
 
 
 
+
 class CreditsDocuments:
 
     def __init__(self,clients:ClientsCrudClass):
@@ -71,10 +73,10 @@ class CreditsDocuments:
     async def get_current_client(self,client_id:int,session:AsyncSession):
         return await self.clients.get_single_client_crud(client_id=client_id,session=session)
         
-    async def download_credits_pdf_statements(self,user_id:int,start_date:date,end_date:date,session:AsyncSession):
+    async def download_credits_pdf_statements(self,client:CurrentClientSchema,start_date:date,end_date:date,session:AsyncSession):
         
         try:
-            current_client=await self.get_current_client(client_id=user_id,session=session)
+            #current_client=await self.get_current_client(client_id=user_id,session=session)
             #build date boundaries
             start_dt=None
             end_dt=None
@@ -85,7 +87,7 @@ class CreditsDocuments:
                 end_dt=datetime.combine(end_date,time.max).replace(tzinfo=timezone.utc)
             #Opening balance = all signed transactions before start_date
             opening_balance=Decimal("0.00")
-            opening_stmt=select(Credits_History_Table.credits_amount,Credits_History_Table.transaction_type).where(Credits_History_Table.created_by==user_id)
+            opening_stmt=select(Credits_History_Table.credits_amount,Credits_History_Table.transaction_type).where(Credits_History_Table.created_by==client.client_id)
             if start_dt:
                 opening_stmt=opening_stmt.where(Credits_History_Table.created_at< start_dt)
             
@@ -95,7 +97,7 @@ class CreditsDocuments:
             for row in opening_rows:
                 opening_balance+=normalize_signed_amount(row.transaction_type,row.credits_amount)
             #statement-period transactions
-            tx_stmt=(select(Credits_History_Table.history_id,Credits_History_Table.credits_amount,Credits_History_Table.transaction_type,Credits_History_Table.is_active,Credits_History_Table.created_at).where(Credits_History_Table.created_by==user_id).order_by(Credits_History_Table.created_at.asc()))
+            tx_stmt=(select(Credits_History_Table.history_id,Credits_History_Table.credits_amount,Credits_History_Table.transaction_type,Credits_History_Table.is_active,Credits_History_Table.created_at).where(Credits_History_Table.created_by==client.client_id).order_by(Credits_History_Table.created_at.asc()))
 
             if start_dt:
                 tx_stmt=tx_stmt.where(Credits_History_Table.created_at >=start_dt)
@@ -187,7 +189,7 @@ class CreditsDocuments:
 
             generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
-            elements.append(Paragraph(f"Client Name: {current_client.client_name}", styles["Normal"]))
+            elements.append(Paragraph(f"Client Name: {client.client_name}", styles["Normal"]))
             elements.append(Paragraph(period_label, styles["Normal"]))
             elements.append(Paragraph(f"Generated at: {generated_at}", styles["SmallMuted"]))
             elements.append(Spacer(1, 10))
@@ -246,13 +248,11 @@ class CreditsDocuments:
             elements.append(Paragraph("This document was generated electronically from the credits service.",styles["CenterSmall"]))
             document.build(elements,onFirstPage=pdf_header_footer,onLaterPages=pdf_header_footer)
             pdf_buffer.seek(0)
-            filename = f"credits_statement_{user_id}_{datetime.now(timezone.utc):%Y%m%d_%H%M%S}.pdf"
-            statements_logger.info(f"client:{current_client.client_name} with email:{current_client.client_email} downloaded transaction history document")
-
+            filename = f"credits_statement_{client.client_id}_{datetime.now(timezone.utc):%Y%m%d_%H%M%S}.pdf"
+            statements_logger.info(f"client:{client.client_name} with email:{client.client_email} downloaded transaction history document")
             return StreamingResponse(pdf_buffer,media_type="application/pdf",headers={"Content-Disposition": f'attachment; filename="{filename}"'})
         
-        except Exception as e:
-
-            statements_logger.exception(f"an internal server error occurred while downloading credits statements for user:{user_id},expception:{str(e)}")
+        except Exception:
+            statements_logger.exception(f"an internal server error occurred while downloading credits statements for user:{client.client_id}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while downloading credits pdf statements")
 

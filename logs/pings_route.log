@@ -4470,3 +4470,5 @@ total_pings
     For further information visit https://errors.pydantic.dev/2.12/v/missing
 2026-03-27 11:26:53,993 - pings_logger - INFO - user:9 loaded pings records equal to:500
 2026-03-27 11:33:10,418 - pings_logger - INFO - user:9 loaded pings records equal to:5000
+2026-03-27 11:39:24,887 - pings_logger - INFO - user:9 loaded pings records equal to:15000
+2026-03-27 11:44:29,756 - pings_logger - INFO - user:9 loaded pings records equal to:100000
