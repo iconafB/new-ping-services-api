@@ -72,38 +72,32 @@ class PingsCrudClass:
             pings_logger.exception(f"an internal server error occurred while load pings:{str(e)}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail="an internal server error occurred while loading pings")
 
-    async def load_pings_using_a_file_upload_crud(self,file:UploadFile,user_id:int,session:AsyncSession)->LoadPingPayloadResponse:
+    async def load_pings_using_a_file_upload_crud(self,file:UploadFile,client:CurrentClientSchema,session:AsyncSession)->LoadPingPayloadResponse:
         try:
             clean_cell_numbers=await self.csv_service.data_extraction(file=file)
             cell_numbers_length=len(clean_cell_numbers)
-            user_credits_record=await credits_object.get_single_credits_record(user_id=user_id,session=session)
+            user_credits_record=await credits_object.get_single_credits_record(client_id=client.client_id,session=session)
             credits=user_credits_record.credits_total
             #search if credits are enough 
             if credits==0:
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail=f"insufficient credits balance:{credits} for user:{user_id} to process the requested pings payload")
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail=f"insufficient credits balance:{credits} for user:{client.client_id} to process the requested pings payload")
             #create token and insert it on the pings table
-            token=await self.client_tokens.insert_client_token(user_id=user_id,session=session)
+            token=await self.client_tokens.insert_client_token(user_id=client.client_id,session=session)
             #keep a record of pings
-            pings_loaded_to_db=await bulk_insert_pings_input(session=session,cell_numbers=clean_cell_numbers,user_id=user_id,token_id=token.pk)
-
+            pings_loaded_to_db=await bulk_insert_pings_input(session=session,cell_numbers=clean_cell_numbers,user_id=client.client_id,token_id=token.pk)
             #There must be functionality for sending payload to another service
             total_numbers_received=pings_loaded_to_db.total_pings_received
             total_pings_processed=pings_loaded_to_db.total_pings_processed
-            duplicate_pings=pings_loaded_to_db.duplicate_pings
-            pings_total_overview=await self.pings_overview
-            print(f"print the total number of pings received:{total_numbers_received}")
-            print(f"duplicate pings:{duplicate_pings}")
-            print(f"total pings processed:{total_pings_processed}")
-            credits_details_response=await credits_object.update_remaining_credits_balance(number_of_records=cell_numbers_length,user_id=user_id,session=session)
+            #duplicate_pings=pings_loaded_to_db.duplicate_pings
+            pings_total_overview=await self.pings_overview.insert_total_pings_overview(session=session,client=client,total_pings=total_pings_processed)
+            credits_details_response=await credits_object.update_remaining_credits_balance(number_of_records=cell_numbers_length,user_id=client.client_id,session=session)
             #the user should get the token to fetch the pings
             return LoadPingPayloadResponse(valid_numbers_count=total_numbers_received,invalid_number_count=10,remaining_credits=credits_details_response.remaining_credits,token=token.token)
-        
-        
         except HTTPException:
             raise
 
-        except Exception as e:
-            pings_logger.exception(f"an internal server error occurred while uploading a pings file:{str(e)}")
+        except Exception:
+            pings_logger.exception(f"an internal server error occurred while uploading a pings file")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred while loading a pings file")
         
         finally:
@@ -131,8 +125,8 @@ class PingsCrudClass:
         except HTTPException:
             raise
 
-        except Exception as e:
-            pings_logger.exception(f"an internal server error occurred while checking the pings status:{str(e)}")
+        except Exception:
+            pings_logger.exception(f"an internal server error occurred while checking the pings status")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred while checking token:{token} with user id:{user_id}")
         
 
@@ -174,8 +168,8 @@ class PingsCrudClass:
             return False
         except HTTPException: 
             raise
-        except Exception as e:
-            pings_logger.exception(f"an internal server error occurred while fetching pings for user:{user_id}:{str(e)}")
+        except Exception:
+            pings_logger.exception(f"an internal server error occurred while fetching pings for user:{user_id}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while fetching pinggs for user:{user_id}")
     
     async def test_pings(self,session:AsyncSession):
@@ -184,32 +178,24 @@ class PingsCrudClass:
             result_query=await session.execute(stmt)
             return result_query.all()
         
-        except Exception as e:
-            pings_logger.exception(f"an internal server error occurred:{str(e)}")
+        except Exception:
+            pings_logger.exception(f"an internal server error occurred")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred")
     
     async def get_pings_overview(self,page:int,page_size:int,client:CurrentClientSchema,session:AsyncSession):
-
         base_query=select(ClientPingsOverview).where(ClientPingsOverview.created_by==client.client_id)
         offset=(page-1)*page_size
-        print(f"print offset:{offset}")
         count_query=select(func.count(ClientPingsOverview.pk))
         base_query=base_query.order_by(ClientPingsOverview.created_at.desc()).offset(offset).limit(page_size)
         try:
             count_query_result=await session.execute(count_query)
             count_result=count_query_result.scalar_one()
-            print(f"total pings overview:{count_result}")
             overview_result=await session.execute(base_query)
             result=overview_result.scalars().all()
-            print("print the total")
-            print(result)
-            #total_pages=ceil(count_result/page_size) if count_result > 0 else 1
-            
             return TotalPingsOverview(total=count_result,page=page,page_size=page_size,results=[PingOverview.model_validate(row) for row in result])
-        
         except HTTPException:
             raise
-        except Exception as e:
+        except Exception:
             pings_logger.exception(f"an internal server error while getting pings overview for client:{client.client_id}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while  fetching pings overview")
         
@@ -217,7 +203,6 @@ class PingsCrudClass:
 class PingsOverviewClass:
 
     def __init__(self):
-
         pass
 
     async def insert_total_pings_overview(self,session:AsyncSession,client:CurrentClientSchema,total_pings:int):
@@ -231,9 +216,9 @@ class PingsOverviewClass:
         except HTTPException:
             raise
 
-        except Exception as e:
+        except Exception:
             await session.rollback()
-            pings_overview_logger.exception(f"an internal server error occurred while inserting total pings for user:{client.client_id},{str(e)}")
+            pings_overview_logger.exception(f"an internal server error occurred while inserting total pings for user:{client.client_id}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while capturing the total number of records")
 
 
@@ -251,8 +236,8 @@ class PingsOverviewClass:
         
         except HTTPException:
             raise
-        except Exception as e:
-            pings_overview_logger.exception(f"an internal server error occurred while fetching pings overview:{str(e)}")
+        except Exception:
+            pings_overview_logger.exception(f"an internal server error occurred while fetching pings overview")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred while fetching all ping overview")
     
 

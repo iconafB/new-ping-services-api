@@ -38,7 +38,7 @@ async def load_file_with_pings(file:UploadFile=File(...,description="Upload a cs
 
     csv_file=await validate_csv_files(file=file)
 
-    return await pings_crud.load_pings_using_a_file_upload_crud(file=csv_file,user_id=client.client_id,session=session)
+    return await pings_crud.load_pings_using_a_file_upload_crud(file=csv_file,client=client,session=session)
 
 
 
