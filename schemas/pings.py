@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel,ConfigDict
 from typing import List
 from datetime import datetime
 class PingsCellNumber(BaseModel):
@@ -22,6 +22,7 @@ class LoadPingPayloadResponse(BaseModel):
 
 
 class PingOverview(BaseModel):
+    model_config=ConfigDict(from_attributes=True)
     pk:int
     client_name:str
     total_pings_sent:int
@@ -31,7 +32,7 @@ class PingsOverview(BaseModel):
     total:int
     page:int
     page_size:int
-    result:List[PingOverview]
+    results:List[PingOverview]
 
 
 #Note clients can give you same numbers to ping, don't give a damn even if those number have been submitted before process them
@@ -46,6 +47,7 @@ class PingStatusResponse(BaseModel):
     token:str
     message:str
 
+#Provide contactability quality on the response of, Medium, Low, and High Quality
 
 class AllPingsPayload(BaseModel):
     message:str

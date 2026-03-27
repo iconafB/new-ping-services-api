@@ -13,6 +13,7 @@ auth_service=UsersAuthCrudClass()
 
 @auth_router.post("/register",status_code=status.HTTP_201_CREATED,summary="Register new client",response_model=CreateClientResponse)
 async def register_client(client:CreateClient,session:AsyncSession=Depends(get_async_session)):
+
     """
         Register a new user by providing the following fields:
         1. email
@@ -20,6 +21,7 @@ async def register_client(client:CreateClient,session:AsyncSession=Depends(get_a
         3. client name
         4. Ubhedeke wena!!!
     """
+    
     return await auth_service.register_new_client_crud(client,session)
 
 @auth_router.post("/login",status_code=status.HTTP_200_OK,description="Login new user into the system")

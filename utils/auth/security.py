@@ -7,7 +7,8 @@ from typing import Annotated
 from datetime import timedelta,datetime,timezone
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from jwt.exceptions import InvalidTokenError
-from fastapi.security import OAuth2PasswordBearer,OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer
+from schemas.clients import CurrentClientSchema
 from models.clients import Clients_Table
 from config.database import get_async_session
 from settings.settings import get_settings
@@ -46,14 +47,16 @@ def get_current_user_id(token: Annotated[str, Depends(oauth2_scheme)]):
     return user_id
 
 #DRY Principle violeted
-async def get_current_active_user_id(client_id:Annotated[int,Depends(get_current_user_id)],session:AsyncSession=Depends(get_async_session))->int:
+async def get_current_active_user(client_id:Annotated[int,Depends(get_current_user_id)],session:AsyncSession=Depends(get_async_session))->CurrentClientSchema:
     credentials_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="Could not validate credentials",headers={"WWW-Authenticate": "Bearer"})
     try:
-        user_stmt=select(Clients_Table.client_id).where(Clients_Table.client_id==client_id)
-        current_user_id=(await session.execute(user_stmt)).scalar_one_or_none()
-        if current_user_id is None:
+        user_stmt=select(Clients_Table).where(Clients_Table.client_id==client_id)
+        current_user=(await session.execute(user_stmt)).scalar_one_or_none()
+        if current_user is None:
             raise credentials_exception
-        return current_user_id
+        user=CurrentClientSchema(client_id=current_user.client_id,client_email=current_user.email,client_name=current_user.client_name)
+        return user
+
     except HTTPException:
         raise
     except Exception as e:

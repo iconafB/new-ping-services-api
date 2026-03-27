@@ -36,15 +36,14 @@ async def bulk_insert_pings_input(session: AsyncSession,cell_numbers: list[str],
             inserted_count += len(result.scalars().all())
         await session.commit()
         cell_numbers_length=len(cell_numbers)
-
         pings_logger.info(f"user:{user_id} loaded pings records equal to:{cell_numbers_length}")
-
         return  PingsBulkInsertResult(total_pings_received=cell_numbers_length,total_pings_processed=inserted_count,duplicate_pings=len(cell_numbers) - inserted_count) 
     
     except Exception as e:
         await session.rollback()
         pings_logger.exception(f"an exception occurred while loading records into the database:{str(e)}")
         raise
+
 
 
 class PingsClass:
@@ -67,4 +66,3 @@ class PingsClass:
             pings_logger.exception(f"an exception occurred while fetching pings:{str(e)}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An exception occurred while fetching pings")
         
-

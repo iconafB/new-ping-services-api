@@ -3477,3 +3477,994 @@ Traceback (most recent call last):
     ...<4 lines>...
     )
 sqlalchemy.exc.MultipleResultsFound: Multiple rows were found when one or none was required
+2026-03-27 08:43:04,670 - pings_logger - INFO - user:9 loaded pings records equal to:1
+2026-03-27 08:43:04,671 - pings_logger - INFO - valid count cell numbers:1, and invalid count:0
+2026-03-27 08:43:43,467 - pings_logger - ERROR - an internal server error while getting pings overview for user:9 this is the exception:3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 0, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 0, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 0, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 202, in get_pings_overview
+    return PingsOverview(total=count_result,page=page,page_size=page_size,result=[PingOverview.model_validate(row) for row in result])
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 250, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 0, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 0, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 0, 'page': 1, '...size': 10, 'result': []}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+2026-03-27 09:10:18,784 - pings_logger - INFO - user:9 loaded pings records equal to:1
+2026-03-27 09:10:18,785 - pings_logger - INFO - valid count cell numbers:1, and invalid count:0
+2026-03-27 10:16:10,388 - pings_logger - ERROR - an internal server error occurred while load pings:CreditsCrudClass.get_single_credits_record() got an unexpected keyword argument 'client'
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 40, in load_pings_payload_crud
+    credits_record=await credits_object.get_single_credits_record(client=client.client_id,session=session)
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: CreditsCrudClass.get_single_credits_record() got an unexpected keyword argument 'client'
+2026-03-27 10:17:49,875 - pings_logger - ERROR - an internal server error occurred while load pings:CreditsCrudClass.get_single_credits_record() got an unexpected keyword argument 'client_id'
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 40, in load_pings_payload_crud
+    credits_record=await credits_object.get_single_credits_record(client_id=client.client_id,session=session)
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: CreditsCrudClass.get_single_credits_record() got an unexpected keyword argument 'client_id'
+2026-03-27 10:18:45,654 - pings_logger - INFO - user:9 loaded pings records equal to:1
+2026-03-27 10:18:45,667 - pings_logger - INFO - valid count cell numbers:1, and invalid count:0
+2026-03-27 10:20:23,442 - pings_logger - INFO - user:9 loaded pings records equal to:2
+2026-03-27 10:20:23,449 - pings_logger - INFO - valid count cell numbers:2, and invalid count:1
+2026-03-27 10:21:56,991 - pings_logger - INFO - user:9 loaded pings records equal to:4
+2026-03-27 10:21:57,000 - pings_logger - INFO - valid count cell numbers:4, and invalid count:1
+2026-03-27 10:22:35,803 - pings_logger - ERROR - an internal server error while getting pings overview for user:client_id=9 client_email='user@gmail.com' client_name='sunday_test' this is the exception:(sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $1: CurrentClientSchema(client_id=9, client_... ('CurrentClientSchema' object cannot be interpreted as an integer)
+[SQL: SELECT client_pings_overview.pk, client_pings_overview.client_name, client_pings_overview.total_pings_sent, client_pings_overview.created_by, client_pings_overview.created_at 
+FROM client_pings_overview 
+WHERE client_pings_overview.created_by = $1::INTEGER ORDER BY client_pings_overview.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER]
+[parameters: (CurrentClientSchema(client_id=9, client_email='user@gmail.com', client_name='sunday_test'), 10, 0)]
+(Background on this error at: https://sqlalche.me/e/20/dbapi)
+Traceback (most recent call last):
+  File "asyncpg/protocol/prepared_stmt.pyx", line 175, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+  File "asyncpg/protocol/codecs/base.pyx", line 251, in asyncpg.protocol.protocol.Codec.encode
+  File "asyncpg/protocol/codecs/base.pyx", line 153, in asyncpg.protocol.protocol.Codec.encode_scalar
+  File "asyncpg/pgproto/codecs/int.pyx", line 54, in asyncpg.pgproto.pgproto.int4_encode
+TypeError: 'CurrentClientSchema' object cannot be interpreted as an integer
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 550, in _prepare_and_execute
+    self._rows = deque(await prepared_stmt.fetch(*parameters))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\asyncpg\prepared_stmt.py", line 177, in fetch
+    data = await self.__bind_execute(args, 0, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\asyncpg\prepared_stmt.py", line 268, in __bind_execute
+    data, status, _ = await self.__do_execute(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+        lambda protocol: protocol.bind_execute(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            self._state, args, '', limit, True, timeout))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\asyncpg\prepared_stmt.py", line 257, in __do_execute
+    return await executor(protocol)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 184, in bind_execute
+  File "asyncpg/protocol/prepared_stmt.pyx", line 204, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+asyncpg.exceptions.DataError: invalid input for query argument $1: CurrentClientSchema(client_id=9, client_... ('CurrentClientSchema' object cannot be interpreted as an integer)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 585, in execute
+    self._adapt_connection.await_(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._prepare_and_execute(operation, parameters)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 563, in _prepare_and_execute
+    self._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 513, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 797, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.Error: <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $1: CurrentClientSchema(client_id=9, client_... ('CurrentClientSchema' object cannot be interpreted as an integer)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 203, in get_pings_overview
+    overview_result=await session.execute(base_query)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\ext\asyncio\session.py", line 449, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 585, in execute
+    self._adapt_connection.await_(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._prepare_and_execute(operation, parameters)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 563, in _prepare_and_execute
+    self._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 513, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 797, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.DBAPIError: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $1: CurrentClientSchema(client_id=9, client_... ('CurrentClientSchema' object cannot be interpreted as an integer)
+[SQL: SELECT client_pings_overview.pk, client_pings_overview.client_name, client_pings_overview.total_pings_sent, client_pings_overview.created_by, client_pings_overview.created_at 
+FROM client_pings_overview 
+WHERE client_pings_overview.created_by = $1::INTEGER ORDER BY client_pings_overview.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER]
+[parameters: (CurrentClientSchema(client_id=9, client_email='user@gmail.com', client_name='sunday_test'), 10, 0)]
+(Background on this error at: https://sqlalche.me/e/20/dbapi)
+2026-03-27 10:30:36,245 - pings_logger - ERROR - an internal server error while getting pings overview for user:client_id=9 client_email='user@gmail.com' client_name='sunday_test' this is the exception:(sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $1: CurrentClientSchema(client_id=9, client_... ('CurrentClientSchema' object cannot be interpreted as an integer)
+[SQL: SELECT client_pings_overview.pk, client_pings_overview.client_name, client_pings_overview.total_pings_sent, client_pings_overview.created_by, client_pings_overview.created_at 
+FROM client_pings_overview 
+WHERE client_pings_overview.created_by = $1::INTEGER ORDER BY client_pings_overview.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER]
+[parameters: (CurrentClientSchema(client_id=9, client_email='user@gmail.com', client_name='sunday_test'), 10, 0)]
+(Background on this error at: https://sqlalche.me/e/20/dbapi)
+Traceback (most recent call last):
+  File "asyncpg/protocol/prepared_stmt.pyx", line 175, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+  File "asyncpg/protocol/codecs/base.pyx", line 251, in asyncpg.protocol.protocol.Codec.encode
+  File "asyncpg/protocol/codecs/base.pyx", line 153, in asyncpg.protocol.protocol.Codec.encode_scalar
+  File "asyncpg/pgproto/codecs/int.pyx", line 54, in asyncpg.pgproto.pgproto.int4_encode
+TypeError: 'CurrentClientSchema' object cannot be interpreted as an integer
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 550, in _prepare_and_execute
+    self._rows = deque(await prepared_stmt.fetch(*parameters))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\asyncpg\prepared_stmt.py", line 177, in fetch
+    data = await self.__bind_execute(args, 0, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\asyncpg\prepared_stmt.py", line 268, in __bind_execute
+    data, status, _ = await self.__do_execute(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+        lambda protocol: protocol.bind_execute(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            self._state, args, '', limit, True, timeout))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\asyncpg\prepared_stmt.py", line 257, in __do_execute
+    return await executor(protocol)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 184, in bind_execute
+  File "asyncpg/protocol/prepared_stmt.pyx", line 204, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+asyncpg.exceptions.DataError: invalid input for query argument $1: CurrentClientSchema(client_id=9, client_... ('CurrentClientSchema' object cannot be interpreted as an integer)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 585, in execute
+    self._adapt_connection.await_(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._prepare_and_execute(operation, parameters)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 563, in _prepare_and_execute
+    self._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 513, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 797, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.Error: <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $1: CurrentClientSchema(client_id=9, client_... ('CurrentClientSchema' object cannot be interpreted as an integer)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 203, in get_pings_overview
+    overview_result=await session.execute(base_query)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\ext\asyncio\session.py", line 449, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 585, in execute
+    self._adapt_connection.await_(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._prepare_and_execute(operation, parameters)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 563, in _prepare_and_execute
+    self._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 513, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 797, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.DBAPIError: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $1: CurrentClientSchema(client_id=9, client_... ('CurrentClientSchema' object cannot be interpreted as an integer)
+[SQL: SELECT client_pings_overview.pk, client_pings_overview.client_name, client_pings_overview.total_pings_sent, client_pings_overview.created_by, client_pings_overview.created_at 
+FROM client_pings_overview 
+WHERE client_pings_overview.created_by = $1::INTEGER ORDER BY client_pings_overview.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER]
+[parameters: (CurrentClientSchema(client_id=9, client_email='user@gmail.com', client_name='sunday_test'), 10, 0)]
+(Background on this error at: https://sqlalche.me/e/20/dbapi)
+2026-03-27 10:32:29,517 - pings_logger - ERROR - an internal server error while getting pings overview for user:client_id=9 client_email='user@gmail.com' client_name='sunday_test' this is the exception:(sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $1: CurrentClientSchema(client_id=9, client_... ('CurrentClientSchema' object cannot be interpreted as an integer)
+[SQL: SELECT client_pings_overview.pk, client_pings_overview.client_name, client_pings_overview.total_pings_sent, client_pings_overview.created_by, client_pings_overview.created_at 
+FROM client_pings_overview 
+WHERE client_pings_overview.created_by = $1::INTEGER ORDER BY client_pings_overview.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER]
+[parameters: (CurrentClientSchema(client_id=9, client_email='user@gmail.com', client_name='sunday_test'), 10, 0)]
+(Background on this error at: https://sqlalche.me/e/20/dbapi)
+Traceback (most recent call last):
+  File "asyncpg/protocol/prepared_stmt.pyx", line 175, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+  File "asyncpg/protocol/codecs/base.pyx", line 251, in asyncpg.protocol.protocol.Codec.encode
+  File "asyncpg/protocol/codecs/base.pyx", line 153, in asyncpg.protocol.protocol.Codec.encode_scalar
+  File "asyncpg/pgproto/codecs/int.pyx", line 54, in asyncpg.pgproto.pgproto.int4_encode
+TypeError: 'CurrentClientSchema' object cannot be interpreted as an integer
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 550, in _prepare_and_execute
+    self._rows = deque(await prepared_stmt.fetch(*parameters))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\asyncpg\prepared_stmt.py", line 177, in fetch
+    data = await self.__bind_execute(args, 0, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\asyncpg\prepared_stmt.py", line 268, in __bind_execute
+    data, status, _ = await self.__do_execute(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+        lambda protocol: protocol.bind_execute(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            self._state, args, '', limit, True, timeout))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\asyncpg\prepared_stmt.py", line 257, in __do_execute
+    return await executor(protocol)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 184, in bind_execute
+  File "asyncpg/protocol/prepared_stmt.pyx", line 204, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+asyncpg.exceptions.DataError: invalid input for query argument $1: CurrentClientSchema(client_id=9, client_... ('CurrentClientSchema' object cannot be interpreted as an integer)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 585, in execute
+    self._adapt_connection.await_(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._prepare_and_execute(operation, parameters)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 563, in _prepare_and_execute
+    self._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 513, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 797, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.Error: <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $1: CurrentClientSchema(client_id=9, client_... ('CurrentClientSchema' object cannot be interpreted as an integer)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 202, in get_pings_overview
+    overview_result=await session.execute(base_query)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\ext\asyncio\session.py", line 449, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 585, in execute
+    self._adapt_connection.await_(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._prepare_and_execute(operation, parameters)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 563, in _prepare_and_execute
+    self._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 513, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 797, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.DBAPIError: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $1: CurrentClientSchema(client_id=9, client_... ('CurrentClientSchema' object cannot be interpreted as an integer)
+[SQL: SELECT client_pings_overview.pk, client_pings_overview.client_name, client_pings_overview.total_pings_sent, client_pings_overview.created_by, client_pings_overview.created_at 
+FROM client_pings_overview 
+WHERE client_pings_overview.created_by = $1::INTEGER ORDER BY client_pings_overview.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER]
+[parameters: (CurrentClientSchema(client_id=9, client_email='user@gmail.com', client_name='sunday_test'), 10, 0)]
+(Background on this error at: https://sqlalche.me/e/20/dbapi)
+2026-03-27 10:34:18,850 - pings_logger - ERROR - an internal server error while getting pings overview for user:client_id=9 client_email='user@gmail.com' client_name='sunday_test' this is the exception:(sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $1: CurrentClientSchema(client_id=9, client_... ('CurrentClientSchema' object cannot be interpreted as an integer)
+[SQL: SELECT client_pings_overview.pk, client_pings_overview.client_name, client_pings_overview.total_pings_sent, client_pings_overview.created_by, client_pings_overview.created_at 
+FROM client_pings_overview 
+WHERE client_pings_overview.created_by = $1::INTEGER ORDER BY client_pings_overview.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER]
+[parameters: (CurrentClientSchema(client_id=9, client_email='user@gmail.com', client_name='sunday_test'), 10, 0)]
+(Background on this error at: https://sqlalche.me/e/20/dbapi)
+Traceback (most recent call last):
+  File "asyncpg/protocol/prepared_stmt.pyx", line 175, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+  File "asyncpg/protocol/codecs/base.pyx", line 251, in asyncpg.protocol.protocol.Codec.encode
+  File "asyncpg/protocol/codecs/base.pyx", line 153, in asyncpg.protocol.protocol.Codec.encode_scalar
+  File "asyncpg/pgproto/codecs/int.pyx", line 54, in asyncpg.pgproto.pgproto.int4_encode
+TypeError: 'CurrentClientSchema' object cannot be interpreted as an integer
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 550, in _prepare_and_execute
+    self._rows = deque(await prepared_stmt.fetch(*parameters))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\asyncpg\prepared_stmt.py", line 177, in fetch
+    data = await self.__bind_execute(args, 0, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\asyncpg\prepared_stmt.py", line 268, in __bind_execute
+    data, status, _ = await self.__do_execute(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+        lambda protocol: protocol.bind_execute(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            self._state, args, '', limit, True, timeout))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\asyncpg\prepared_stmt.py", line 257, in __do_execute
+    return await executor(protocol)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 184, in bind_execute
+  File "asyncpg/protocol/prepared_stmt.pyx", line 204, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+asyncpg.exceptions.DataError: invalid input for query argument $1: CurrentClientSchema(client_id=9, client_... ('CurrentClientSchema' object cannot be interpreted as an integer)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 585, in execute
+    self._adapt_connection.await_(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._prepare_and_execute(operation, parameters)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 563, in _prepare_and_execute
+    self._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 513, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 797, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.Error: <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $1: CurrentClientSchema(client_id=9, client_... ('CurrentClientSchema' object cannot be interpreted as an integer)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 202, in get_pings_overview
+    overview_result=await session.execute(base_query)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\ext\asyncio\session.py", line 449, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 585, in execute
+    self._adapt_connection.await_(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._prepare_and_execute(operation, parameters)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 563, in _prepare_and_execute
+    self._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 513, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 797, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.DBAPIError: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $1: CurrentClientSchema(client_id=9, client_... ('CurrentClientSchema' object cannot be interpreted as an integer)
+[SQL: SELECT client_pings_overview.pk, client_pings_overview.client_name, client_pings_overview.total_pings_sent, client_pings_overview.created_by, client_pings_overview.created_at 
+FROM client_pings_overview 
+WHERE client_pings_overview.created_by = $1::INTEGER ORDER BY client_pings_overview.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER]
+[parameters: (CurrentClientSchema(client_id=9, client_email='user@gmail.com', client_name='sunday_test'), 10, 0)]
+(Background on this error at: https://sqlalche.me/e/20/dbapi)
+2026-03-27 10:37:51,441 - pings_logger - ERROR - an internal server error while getting pings overview for user:9 this is the exception:1 validation error for PingOverview
+  Input should be a valid dictionary or instance of PingOverview [type=model_type, input_value=<models.pings.ClientPings...t at 0x000002B5C9777230>, input_type=ClientPingsOverview]
+    For further information visit https://errors.pydantic.dev/2.12/v/model_type
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 207, in get_pings_overview
+    return PingsOverview(total=count_result,page=page,page_size=page_size,result=[PingOverview.model_validate(row) for row in result])
+                                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 716, in model_validate
+    return cls.__pydantic_validator__.validate_python(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        obj,
+        ^^^^
+    ...<5 lines>...
+        by_name=by_name,
+        ^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for PingOverview
+  Input should be a valid dictionary or instance of PingOverview [type=model_type, input_value=<models.pings.ClientPings...t at 0x000002B5C9777230>, input_type=ClientPingsOverview]
+    For further information visit https://errors.pydantic.dev/2.12/v/model_type
+2026-03-27 10:38:40,113 - pings_logger - ERROR - an internal server error while getting pings overview for client:9:1 validation error for PingOverview
+  Input should be a valid dictionary or instance of PingOverview [type=model_type, input_value=<models.pings.ClientPings...t at 0x00000228CC757230>, input_type=ClientPingsOverview]
+    For further information visit https://errors.pydantic.dev/2.12/v/model_type
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 207, in get_pings_overview
+    return PingsOverview(total=count_result,page=page,page_size=page_size,result=[PingOverview.model_validate(row) for row in result])
+                                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 716, in model_validate
+    return cls.__pydantic_validator__.validate_python(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        obj,
+        ^^^^
+    ...<5 lines>...
+        by_name=by_name,
+        ^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for PingOverview
+  Input should be a valid dictionary or instance of PingOverview [type=model_type, input_value=<models.pings.ClientPings...t at 0x00000228CC757230>, input_type=ClientPingsOverview]
+    For further information visit https://errors.pydantic.dev/2.12/v/model_type
+2026-03-27 10:42:09,090 - pings_logger - ERROR - an internal server error while getting pings overview for client:9:1 validation error for PingOverview
+  Input should be a valid dictionary or instance of PingOverview [type=model_type, input_value=<models.pings.ClientPings...t at 0x0000015CF1F67230>, input_type=ClientPingsOverview]
+    For further information visit https://errors.pydantic.dev/2.12/v/model_type
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 207, in get_pings_overview
+    return PingsOverview(total=count_result,page=page,page_size=page_size,result=[PingOverview.model_validate(row) for row in result])
+                                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 716, in model_validate
+    return cls.__pydantic_validator__.validate_python(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        obj,
+        ^^^^
+    ...<5 lines>...
+        by_name=by_name,
+        ^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for PingOverview
+  Input should be a valid dictionary or instance of PingOverview [type=model_type, input_value=<models.pings.ClientPings...t at 0x0000015CF1F67230>, input_type=ClientPingsOverview]
+    For further information visit https://errors.pydantic.dev/2.12/v/model_type
+2026-03-27 10:46:40,990 - pings_logger - ERROR - an internal server error while getting pings overview for client:9:3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 207, in get_pings_overview
+    return PingsOverview(total=count_result,page=page,page_size=page_size,result=[PingOverview.model_validate(row) for row in result])
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 250, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+2026-03-27 10:48:18,243 - pings_logger - ERROR - an internal server error while getting pings overview for client:9:3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 207, in get_pings_overview
+    return PingsOverview(total=count_result,page=page,page_size=page_size,result=[PingOverview.model_validate(row) for row in result])
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 250, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+2026-03-27 10:50:15,848 - pings_logger - ERROR - an internal server error while getting pings overview for client:9:3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 207, in get_pings_overview
+    return PingsOverview(total=count_result,page=page,page_size=page_size,results=[PingOverview.model_validate(row) for row in result])
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 250, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+2026-03-27 10:50:31,772 - pings_logger - ERROR - an internal server error while getting pings overview for client:9
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 207, in get_pings_overview
+    return PingsOverview(total=count_result,page=page,page_size=page_size,results=[PingOverview.model_validate(row) for row in result])
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 250, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+2026-03-27 10:51:14,468 - pings_logger - ERROR - an internal server error while getting pings overview for client:9
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 207, in get_pings_overview
+    return PingsOverview(total=count_result,page=page,page_size=page_size,results=[PingOverview(row) for row in result])
+                                                                                   ~~~~~~~~~~~~^^^^^
+TypeError: BaseModel.__init__() takes 1 positional argument but 2 were given
+2026-03-27 10:51:40,411 - pings_logger - ERROR - an internal server error while getting pings overview for client:9
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 207, in get_pings_overview
+    return PingsOverview(total=count_result,page=page,page_size=page_size,results=[PingOverview.model_validate(row) for row in result])
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 250, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+2026-03-27 10:53:40,395 - pings_logger - ERROR - an internal server error while getting pings overview for client:9
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 209, in get_pings_overview
+    return PingsOverview(total=count_result,page=page,page_size=page_size,results=[PingOverview.model_validate(row) for row in result])
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 250, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for PingsOverview
+pk
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+total_pings
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+created_by
+  Field required [type=missing, input_value={'total': 1, 'page': 1, '...atetime.timezone.utc))]}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+2026-03-27 10:57:28,241 - pings_logger - ERROR - an internal server error while getting pings overview for client:9
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 208, in get_pings_overview
+    return TotalPingsOverview(total=count_result,page=page,page_size=page_size,results=[PingOverview.model_validate(row) for row in result])
+                                                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\iconaf\Documents\new-ping-service-api\venv\Lib\site-packages\pydantic\main.py", line 716, in model_validate
+    return cls.__pydantic_validator__.validate_python(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        obj,
+        ^^^^
+    ...<5 lines>...
+        by_name=by_name,
+        ^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for PingOverview
+total_pings
+  Field required [type=missing, input_value=<models.pings.ClientPings...t at 0x000001C7A6E47230>, input_type=ClientPingsOverview]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing

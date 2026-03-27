@@ -28,6 +28,12 @@ class ClientsSchema(BaseModel):
     created_at:datetime
     is_active:bool
 
+
+class CurrentClientSchema(BaseModel):
+    client_id:int
+    client_email:str
+    client_name:str
+    
 class AllClientsSchema(BaseModel):
     model_config=ConfigDict(from_attributes=True)
     client_name:str
