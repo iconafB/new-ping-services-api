@@ -1,10 +1,11 @@
 from fastapi import HTTPException,status,UploadFile
 from sqlalchemy import select,func,update
 from math import ceil
+from datetime import datetime,timezone,timedelta
 from sqlalchemy.ext.asyncio.session import AsyncSession
-from models.pings import pinged_input,ClientPingsOverview,PingsInput
+from models.pings import pinged_input,ClientPingsOverview,PingsInput,PingsOutputStatus
 from models.client_tokens import pings_retrieval_tokens
-from schemas.pings import PingPayload,PingsPayloadResponse,LoadPingPayloadResponse,PingStatusResponse,AllPingsPayload
+from schemas.pings import PingPayload,PingsPayloadResponse,LoadPingPayloadResponse,PingStatusResponse,AllPingsPayload,FetchedPingsResponse,PingsOutput
 from schemas.pings_overview import PingOverview,TotalPingsOverview
 from schemas.clients import CurrentClientSchema
 from dto.pings import PingsOverviewInsertionResult
@@ -72,6 +73,7 @@ class PingsCrudClass:
             pings_logger.exception(f"an internal server error occurred while load pings:{str(e)}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail="an internal server error occurred while loading pings")
 
+
     async def load_pings_using_a_file_upload_crud(self,file:UploadFile,client:CurrentClientSchema,session:AsyncSession)->LoadPingPayloadResponse:
         try:
             clean_cell_numbers=await self.csv_service.data_extraction(file=file)
@@ -104,6 +106,7 @@ class PingsCrudClass:
             await file.close()
     
     #this method can be made 
+
     async def check_pings_status(self,token:str,user_id:int,session:AsyncSession):
         #validate the existance of the token
         token_query=select(pings_retrieval_tokens.token_hash,pings_retrieval_tokens.pk).where(pings_retrieval_tokens.token_hash==token).where(pings_retrieval_tokens.client_id==user_id)
@@ -163,14 +166,40 @@ class PingsCrudClass:
             pings_logger.exception(f"an internal server error occurred while fetching pings {str(e)}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while fetching pings")
 
-    async def fetch_pings_crud(self,pings_id:str,user_id:int,session:AsyncSession):
+    async def fetch_pings_crud_payload(self,token:str,client:CurrentClientSchema,session:AsyncSession):
+        #verify if the token has been used before
+        token_query=select(pings_retrieval_tokens).where(pings_retrieval_tokens.token_hash==token)
+        #maybe decrypt the token and get an integer 
+        
         try:
-            return False
+            #search for the token
+            token_query_result=await session.execute(token_query)
+            token_result=token_query_result.scalar_one_or_none()
+            if token_result is None:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail=f"invalid token submitted by client:{client.client_id}")
+            #update the used at column from the pings retrieval table to the current
+            sa_time_zone=timezone(timedelta(hours=2))
+            today_date=datetime.now(sa_time_zone)
+            #update the is_used column to the current date and than deactivate the token
+            update_token_used_date=(update(pings_retrieval_tokens).where(pings_retrieval_tokens.token_hash==token).values(used_at=today_date.isoformat(),is_active=False))
+            await session.execute(update_token_used_date)
+            #use the token to fetch the numbers that match it submitted by the user
+            #determine what table needs to feed this route
+            # joining fields on tables tokens table, pings_status_output, and pings_input
+            join_stmt=select(PingsOutputStatus.cell_number,PingsOutputStatus.model_output,PingsOutputStatus.pinged_date).join(PingsOutputStatus.cell_number,PingsInput.cell_number).where(PingsInput.created_by==client.client_id).where(pings_retrieval_tokens.token_hash==token)
+            # the fields that are used to filter are created_by, token_hash, pk(token's table)
+            # the returned field are model output, cell number (pings_status_output table),pinged_date
+            join_result=await session.execute(join_stmt)
+            results=join_result.scalars().all()
+            pings_logger.info(f"client:{client.client_id} retrieved pings amounting to this amount")
+            pings_results=FetchedPingsResponse(pings=[PingsOutput(row) for row in results])
+            return pings_results
+        
         except HTTPException: 
             raise
         except Exception:
-            pings_logger.exception(f"an internal server error occurred while fetching pings for user:{user_id}")
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while fetching pinggs for user:{user_id}")
+            pings_logger.exception(f"an internal server error occurred while fetching pings for user:{client.client_id}")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while fetching pinggs for user:{client.client_id}")
     
     async def test_pings(self,session:AsyncSession):
         stmt=select(pinged_input).limit(5)

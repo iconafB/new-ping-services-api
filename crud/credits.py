@@ -6,9 +6,8 @@ from utils.logging.logger import define_logger
 from models.credits import Credits,Credits_History_Table,TransactionType
 from schemas.clients import CurrentClientSchema
 from schemas.credits import CreateCreditsResponse,UserCreditsHistoryResponse,UserCreditsHistoryItem,DeleteCreditsHistory,UpdateCreditsRemainingCredits
-"""
-Implement  a class that performs crud for the credits entity of the system
-"""
+
+
 
 credits_logger=define_logger("credits_logger","logs/credits_route.log")
 

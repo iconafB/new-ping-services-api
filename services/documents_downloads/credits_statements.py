@@ -64,8 +64,6 @@ def pdf_header_footer(canvas, doc):
     canvas.restoreState()
 
 
-
-
 class CreditsDocuments:
 
     def __init__(self,clients:ClientsCrudClass):
@@ -255,4 +253,6 @@ class CreditsDocuments:
         except Exception:
             statements_logger.exception(f"an internal server error occurred while downloading credits statements for user:{client.client_id}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while downloading credits pdf statements")
+
+
 

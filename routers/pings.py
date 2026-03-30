@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from crud.pings import PingsCrudClass
 from config.database import get_async_session
 from schemas.clients import CurrentClientSchema
-from schemas.pings import PingPayload,LoadPingPayloadResponse,PingStatusResponse
+from schemas.pings import PingPayload,LoadPingPayloadResponse,PingStatusResponse,FetchedPingsResponse
 from schemas.pings_overview import TotalPingsOverview
 from utils.auth.security import get_current_active_user
 from utils.file_helpers.csv_validators import validate_csv_files
@@ -21,11 +21,16 @@ async def load_pings_payload(pings:PingPayload,client:CurrentClientSchema=Depend
     return await pings_crud.load_pings_payload_crud(pings=pings,client=client,session=session)
 
 #get pings
-@pings_router.get("",status_code=status.HTTP_200_OK,summary="Fetch pings by providing pings_id")
+@pings_router.get("",status_code=status.HTTP_200_OK,summary="Fetch pings by providing the unique pings token",response_model=FetchedPingsResponse)
 async def get_pings_loaded(token:str=Query(description="Token issued to fetch pings"),client:CurrentClientSchema=Depends(get_current_active_user),session:AsyncSession=Depends(get_async_session)):
+    """
+    Fetch the submitted pings cell numbers by the provideing a valid token
+    """
+    return await pings_crud.fetch_pings_crud_payload(token=token,client=client,session=session)
 
-    return token
-
+@pings_router.get("/file",status_code=status.HTTP_200_OK,summary="Fetch pings by providing the unique pings token in a csv file")
+async def get_pings_csv_file():
+    return
 
 #load pings
 @pings_router.post("/file",status_code=status.HTTP_201_CREATED,summary="Upload file with cell numbers to ping",response_model=LoadPingPayloadResponse)

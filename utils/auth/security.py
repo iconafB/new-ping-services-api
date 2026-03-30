@@ -1,4 +1,6 @@
 from fastapi import HTTPException,status,Depends
+from fastapi.security import HTTPBasic,HTTPBasicCredentials
+import secrets
 from typing import Annotated
 import jwt
 from sqlalchemy import select
@@ -13,11 +15,15 @@ from models.clients import Clients_Table
 from config.database import get_async_session
 from settings.settings import get_settings
 from utils.logging.logger import define_logger
+
 auth_logger=define_logger("auth_logger","logs/auth_route.log")
 ALGORITHM='HS256'
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 oauth2_scheme=OAuth2PasswordBearer(tokenUrl="/auth/login")
 password_hash = PasswordHash.recommended()
+
+security=HTTPBasic()
+
 
 def hash_password(plain_password)->str:
     return password_hash.hash(plain_password)
@@ -34,7 +40,17 @@ def create_access_token(data:dict,expires_delta:timedelta | None=None)->str:
     to_encode.update({"exp":expire})
     encoded_jwt=jwt.encode(to_encode,get_settings().SECRET_KEY,algorithm=ALGORITHM)
     return encoded_jwt
-   
+
+def require_docs_auth(credentials:HTTPBasicCredentials=Depends(security)):
+    settings=get_settings()
+    user_ok=secrets.compare_digest(credentials.username,settings.ADMIN_USERNAME)
+    pass_ok=secrets.compare_digest(credentials.password,settings.ADMIN_PASSWORD)
+    if not (user_ok and pass_ok):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="Unauthorized",headers={"WWW-Authenticate":"Basic"})
+    return True
+
+
+
 def get_current_user_id(token: Annotated[str, Depends(oauth2_scheme)]):
     credentials_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="Could not validate credentials",headers={"WWW-Authenticate": "Bearer"})
     try:

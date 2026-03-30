@@ -1,6 +1,7 @@
 from pydantic import BaseModel,ConfigDict
 from typing import List
 from datetime import datetime
+
 class PingsCellNumber(BaseModel):
     cell_number:str
 
@@ -52,3 +53,13 @@ class PingStatusResponse(BaseModel):
 class AllPingsPayload(BaseModel):
     message:str
     cell_numbers:list[str]
+
+
+class PingsOutput(BaseModel):
+    model_output:str
+    cell_number:str
+    pinged_date:datetime
+
+
+class FetchedPingsResponse(BaseModel):
+    pings:List[PingsOutput]

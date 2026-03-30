@@ -1,6 +1,5 @@
 from fastapi import APIRouter,Depends,status,Query
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Annotated
 from datetime import date
 from crud.credits import CreditsCrudClass
 from schemas.credits import CreateCreditsResponse,CreateCredits,UserCreditsHistoryResponse,DeleteCreditsHistory
@@ -16,7 +15,6 @@ download_services=CreditsDocuments(clients=current_client())
 
 #load credits
 @credits_router.post("/load",status_code=status.HTTP_201_CREATED,summary="Load credits",response_model=CreateCreditsResponse)
-
 async def load_credits(credits_amount:CreateCredits,client:CurrentClientSchema=Depends(get_current_active_user),session:AsyncSession=Depends(get_async_session)):
     """
         Top up credits for the pings service
@@ -31,7 +29,6 @@ async def get_user_credits_history(page:int=Query(1,ge=1,description="page numbe
 #get single history record
 @credits_router.get("/record",status_code=status.HTTP_200_OK,description="Get Single record of credits",response_model=CreateCreditsResponse)
 async def get_single_credits_record(client:CurrentClientSchema=Depends(get_current_active_user),session:AsyncSession=Depends(get_async_session)):
-
     return await credits_object.get_single_credits_record(client=client,session=session)
 
 @credits_router.patch("/delete",status_code=status.HTTP_200_OK,description="Delete credit history of the current user",response_model= DeleteCreditsHistory)
@@ -79,4 +76,3 @@ async def download_credits_statements_pdf(client:CurrentClientSchema=Depends(get
     """
 
     return await download_services.download_credits_pdf_statements(client=client,start_date=start_date,end_date=end_date,session=session)
-

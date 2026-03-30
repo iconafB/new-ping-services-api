@@ -1,0 +1,27 @@
+services:
+  clients_ping_services:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      MASTER_DB_OWNER: ${MASTER_DB_OWNER}
+      MASTER_DB_PASSWORD: ${MASTER_DB_PASSWORD}
+      MASTER_DB_HOST_NAME: ${MASTER_DB_HOST_NAME}
+      MASTER_DB_PORT: ${MASTER_DB_PORT}
+      MASTER_DB_NAME: ${MASTER_DB_NAME}
+      TEST_DB_PASSWORD: ${TEST_DB_PASSWORD}
+      TEST_DB_PORT: ${TEST_DB_PORT}
+      TEST_DB_HOST_NAME: ${TEST_DB_HOST_NAME}
+      TEST_DB_NAME: ${TEST_DB_NAME}
+      TEST_DB_USERNAME: ${TEST_DB_USERNAME}
+      ADMIN_USERNAME: ${ADMIN_USERNAME}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+    
+    healthcheck:
+      test: ["CMD","python","-c","import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/v1/health')"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
