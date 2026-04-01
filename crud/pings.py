@@ -37,7 +37,7 @@ class PingsCrudClass:
 
         try:
             # before loading pings, check if the credits balance matches
-            credits_record=await credits_object.get_single_credits_record(client_id=client.client_id,session=session)
+            credits_record=await credits_object.get_single_credits_record(client=client,session=session)
             credits=credits_record.credits_total
             pings_length=len(pings.cell_numbers)
             if credits==0:
@@ -78,7 +78,7 @@ class PingsCrudClass:
         try:
             clean_cell_numbers=await self.csv_service.data_extraction(file=file)
             cell_numbers_length=len(clean_cell_numbers)
-            user_credits_record=await credits_object.get_single_credits_record(client_id=client.client_id,session=session)
+            user_credits_record=await credits_object.get_single_credits_record(client=client,session=session)
             credits=user_credits_record.credits_total
             #search if credits are enough 
             if credits==0:

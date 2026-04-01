@@ -26,8 +26,6 @@ class ClientTokenCrud:
             await session.commit()
             await session.refresh(client_token)
             client_tokens_logger.info(f"user:{user_id} created token")
-            print("print the inserted token")
-            print(client_token.token_hash)
             return TokenInsertionResponse(pk=client_token.pk,token=client_token.token_hash,created_at=client_token.created_at)
         
         except HTTPException:

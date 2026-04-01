@@ -4472,3 +4472,11 @@ total_pings
 2026-03-27 11:33:10,418 - pings_logger - INFO - user:9 loaded pings records equal to:5000
 2026-03-27 11:39:24,887 - pings_logger - INFO - user:9 loaded pings records equal to:15000
 2026-03-27 11:44:29,756 - pings_logger - INFO - user:9 loaded pings records equal to:100000
+2026-04-01 14:40:48,392 - pings_logger - ERROR - an internal server error occurred while load pings:CreditsCrudClass.get_single_credits_record() got an unexpected keyword argument 'client_id'. Did you mean 'client'?
+Traceback (most recent call last):
+  File "C:\Users\iconaf\Documents\new-ping-service-api\crud\pings.py", line 40, in load_pings_payload_crud
+    credits_record=await credits_object.get_single_credits_record(client_id=client.client_id,session=session)
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: CreditsCrudClass.get_single_credits_record() got an unexpected keyword argument 'client_id'. Did you mean 'client'?
+2026-04-01 14:42:55,150 - pings_logger - INFO - user:9 loaded pings records equal to:1
+2026-04-01 14:42:55,163 - pings_logger - INFO - valid count cell numbers:1, and invalid count:0

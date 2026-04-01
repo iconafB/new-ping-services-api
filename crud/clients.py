@@ -171,19 +171,17 @@ class UsersAuthCrudClass:
             if not verify_password(user_password,result.password):
                 raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail=f"Invalid authorization")
             #create access token
-            users_logger.info(f"user:{result.client_id} with email:{result.email} logged in")
-            access_toke_expires=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+            access_token_expires=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
             #create access token
-            token=create_access_token(data={'user_id':result.client_id},expires_delta=access_toke_expires)
+            token=create_access_token(data={'user_id':result.client_id},expires_delta=access_token_expires)
             #log user logged in 
-            users_logger.info(f"user:{user_email} successfully logged in")
+            users_logger.info(f"user:{result.client_id} with email:{result.email} logged in")
             return Token(access_token=token,token_type='Bearer')
-        
         except HTTPException:
             raise
 
-        except Exception as e:
+        except Exception:
             await session.rollback()
-            users_logger.exception(f"an internal server error while login user:{str(e)}")
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An internal server error occurred while login user")
+            users_logger.exception("an internal server error while login user")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail="An internal server error occurred while login user")
 

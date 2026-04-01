@@ -11,3 +11,5 @@ class CreateAdminResponse(BaseModel):
     last_name:str
     email:str
 
+
+

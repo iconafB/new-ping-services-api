@@ -1878,3 +1878,6 @@ TypeError: 'credit_amount' is an invalid keyword argument for Credits_History_Ta
 2026-03-30 08:14:16,324 - credits_logger - INFO - user:9 loaded credits total:100020
 2026-03-30 08:14:59,966 - credits_logger - INFO - user:9 loaded credits total:100045
 2026-03-30 09:15:23,547 - credits_logger - INFO - user:9 loaded credits total:100055
+2026-04-01 14:38:50,522 - credits_logger - INFO - user:9 loaded credits total:106805
+2026-04-01 14:40:18,508 - credits_logger - INFO - user:9 loaded credits:145 total:106950
+2026-04-01 14:47:54,699 - credits_logger - INFO - user:9 loaded credits:5500 total:112449

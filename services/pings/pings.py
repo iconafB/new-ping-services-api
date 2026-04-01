@@ -47,22 +47,23 @@ async def bulk_insert_pings_input(session: AsyncSession,cell_numbers: list[str],
 
 
 class PingsClass:
-    
+    # send pings to the next pings service or dedago
+
     async def send_pings_to_dedago(self):
         try:
             return
         except HTTPException:
             raise
-        except Exception as e:
-            pings_logger.exception(f"an exception occurred while sending pings to dedago:{str(e)}")
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An exception occurred while sending pings to dedago")
+        except Exception:
+            pings_logger.exception("an exception occurred while sending pings to dedago:")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail="An exception occurred while sending pings to dedago")
         
     async def fetch_pings_from_other_services(self):
         try:
             return
         except HTTPException:
             raise
-        except Exception as e:
-            pings_logger.exception(f"an exception occurred while fetching pings:{str(e)}")
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"An exception occurred while fetching pings")
+        except Exception:
+            pings_logger.exception("an exception occurred while fetching pings")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail="An exception occurred while fetching pings")
         

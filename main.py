@@ -26,6 +26,8 @@ async def lifespan(app:FastAPI):
     #clean on shutdown
     await engine.dispose()
 
+
+
 app=FastAPI(title="CLIENTS PINGS API SERVICE",lifespan=lifespan,docs_url=None,redoc_url=None,openapi_url=None,)
 @app.get("/openapi.json",include_in_schema=False)
 def openapi_json(_:bool=Depends(require_docs_auth)):

@@ -26,24 +26,29 @@ class AdminstrationCrudClass:
 
 class AdminAuthCrudClass:
     
-    async def register_new_admin(create_admin:CreateAdmin,session:AsyncSession):
+    async def register_new_admin(self,create_admin:CreateAdmin,session:AsyncSession):
+
         admin_query=select(Admin).where(Admin.email==create_admin.email)
         hashed_password=hash_password(create_admin.password)
         try:
             result=(await session.execute(admin_query)).scalar_one_or_none()
             if result is not None:
-                raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail=f"admin already exists")
+                raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail=f"Invalid credentials")
             new_admin=Admin(email=create_admin.email,password=hashed_password,first_name=create_admin.first_name,last_name=create_admin.last_name)
+
             session.add(new_admin)
             await session.commit()
             await session.refresh(new_admin)
             admin_logger.info(f"new admin:{new_admin.email} registered")
             return new_admin
-        except Exception as e:
-            admin_logger.exception(f"an internal server error occurred while creating new admin:{str(e)}")
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"an internal server error occurred while creating new admin:{str(e)}")
         
-    async def login_admin_crud(form_data:OAuth2PasswordRequestForm,session:AsyncSession):
+        except Exception:
+            admin_logger.exception("an internal server error occurred while creating new admin")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail="an internal server error occurred while creating new admin")
+        
+        
+        
+    async def login_admin_crud(self,form_data:OAuth2PasswordRequestForm,session:AsyncSession):
         user_email=form_data.username
         user_password=form_data.password
         user_query=select(Admin).where(Admin.email==user_email)

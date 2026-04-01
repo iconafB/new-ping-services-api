@@ -28,7 +28,7 @@ class CreditsCrudClass:
                 session.add(new_user_credits_history)
                 await session.commit()
                 await session.refresh(new_user_credits)
-                credits_logger.info(f"user:{user_id} added credits total:{new_user_credits.credits_balance}")
+                credits_logger.info(f"user:{user_id} loaded credits:{credits_amount} total:{new_user_credits.credits_balance}")
                 return CreateCreditsResponse(credits_id=new_user_credits.credits_id,credits_total=new_user_credits.credits_balance,created_by=new_user_credits.created_by)
             
             #the user exist,they have credits history
@@ -39,7 +39,7 @@ class CreditsCrudClass:
                 session.add(new_history_record)
                 await session.commit()
                 await session.refresh(user_credits_result)
-                credits_logger.info(f"user:{user_id} loaded credits total:{user_credits_result.credits_balance}")
+                credits_logger.info(f"user:{user_id} loaded credits:{credits_amount} total:{user_credits_result.credits_balance}")
                 return CreateCreditsResponse(credits_id=user_credits_result.credits_id,credits_total=user_credits_result.credits_balance,created_by=user_credits_result.created_by)
 
         except HTTPException:

@@ -76,3 +76,6 @@ async def download_credits_statements_pdf(client:CurrentClientSchema=Depends(get
     """
 
     return await download_services.download_credits_pdf_statements(client=client,start_date=start_date,end_date=end_date,session=session)
+
+
+

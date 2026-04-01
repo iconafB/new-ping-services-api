@@ -15,3 +15,4 @@ class TotalPingsOverview(BaseModel):
     page:int
     page_size:int
     results:List[PingOverview]
+

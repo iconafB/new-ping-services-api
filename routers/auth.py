@@ -6,10 +6,13 @@ from config.database import get_async_session
 from crud.clients import UsersAuthCrudClass
 from crud.admin import AdminAuthCrudClass
 from schemas.clients import CreateClientResponse,CreateClient
+from schemas.admin import CreateAdminResponse,CreateAdmin
 from config.database import get_async_session
 from sqlalchemy.ext.asyncio.session import AsyncSession
 auth_router=APIRouter(tags=["AUTHENTICATION ROUTES"],prefix="/auth")
 auth_service=UsersAuthCrudClass()
+
+admin_auth_service=AdminAuthCrudClass()
 
 @auth_router.post("/register",status_code=status.HTTP_201_CREATED,summary="Register new client",response_model=CreateClientResponse)
 async def register_client(client:CreateClient,session:AsyncSession=Depends(get_async_session)):
@@ -26,35 +29,18 @@ async def register_client(client:CreateClient,session:AsyncSession=Depends(get_a
 
 @auth_router.post("/login",status_code=status.HTTP_200_OK,description="Login new user into the system")
 async def login_client(form_data:Annotated[OAuth2PasswordRequestForm,Depends()],session:AsyncSession=Depends(get_async_session)):
+    
     """
-        login registered users by providing the following fields
+        Login registered users by providing the following fields
         1. email
         2. password
     """
-    print("enter login method")
+
     return await auth_service.login_client_crud(form_data,session)
 
-@auth_router.post("/admin/register")
-
-async def register_new_admin():
-    """
-    register admin by providing the following fields
-    1. email/username
-    2. password
-    3. first name
-    4. last name
-    5. is_admin
-    """
-    return True
 
 
 
-@auth_router.post("/admin/login")
-async def login_admin():
-    """
-        login the admin using the following fields
-        1. password 
-        2. email
-    """
-    return True
+
+
 

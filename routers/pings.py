@@ -7,6 +7,7 @@ from schemas.pings import PingPayload,LoadPingPayloadResponse,PingStatusResponse
 from schemas.pings_overview import TotalPingsOverview
 from utils.auth.security import get_current_active_user
 from utils.file_helpers.csv_validators import validate_csv_files
+
 pings_router=APIRouter(tags=["PINGS ROUTES"],prefix="/v1/pings")
 
 #This needs attebtion
@@ -19,6 +20,9 @@ async def load_pings_payload(pings:PingPayload,client:CurrentClientSchema=Depend
         Please note that duplicate cell numbers will be filtered out and not sent to the ping machine
     """
     return await pings_crud.load_pings_payload_crud(pings=pings,client=client,session=session)
+
+
+
 
 #get pings
 @pings_router.get("",status_code=status.HTTP_200_OK,summary="Fetch pings by providing the unique pings token",response_model=FetchedPingsResponse)
